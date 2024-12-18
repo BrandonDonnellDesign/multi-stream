@@ -41,7 +41,7 @@ export default function StreamView({ streams }: StreamViewProps) {
               frameBorder="0"
               allowFullScreen
               scrolling="no"
-              className="absolute inset-0  h-full"
+              className="absolute inset-0 w-full h-full"
             />
           )}
         </div>

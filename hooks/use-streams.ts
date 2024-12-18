@@ -1,12 +1,24 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Stream } from "@/types/stream";
+import { decodeStreamsFromUrl } from "@/lib/stream-utils";
 
 export function useStreams() {
   const [streams, setStreams] = useState<Stream[]>([]);
+  const [isInitialized, setIsInitialized] = useState(false);
 
-  const addStream = (platform: "twitch" | "kick", channel: string) => {
+  useEffect(() => {
+    if (!isInitialized) {
+      const urlStreams = decodeStreamsFromUrl();
+      if (urlStreams.length > 0) {
+        setStreams(urlStreams);
+      }
+      setIsInitialized(true);
+    }
+  }, [isInitialized]);
+
+  const addStream = useCallback((platform: "twitch" | "kick", channel: string) => {
     setStreams((prev) => [
       ...prev,
       {
@@ -16,21 +28,21 @@ export function useStreams() {
         visible: true,
       },
     ]);
-  };
+  }, []);
 
-  const removeStream = (id: string) => {
+  const removeStream = useCallback((id: string) => {
     setStreams((prev) => prev.filter((stream) => stream.id !== id));
-  };
+  }, []);
 
-  const toggleStreamVisibility = (id: string) => {
+  const toggleStreamVisibility = useCallback((id: string) => {
     setStreams((prev) =>
       prev.map((stream) =>
         stream.id === id ? { ...stream, visible: !stream.visible } : stream
       )
     );
-  };
+  }, []);
 
-  const refreshStream = (id: string) => {
+  const refreshStream = useCallback((id: string) => {
     setStreams((prev) =>
       prev.map((stream) =>
         stream.id === id
@@ -38,7 +50,7 @@ export function useStreams() {
           : stream
       )
     );
-  };
+  }, []);
 
   return {
     streams,

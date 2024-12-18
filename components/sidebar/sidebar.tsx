@@ -2,6 +2,7 @@ import { StreamForm } from "./stream-form";
 import { StreamList } from "./stream-list";
 import { Stream } from "@/types/stream";
 import { Button } from "@/components/ui/button";
+import { ShareButton } from "@/components/share/share-button";
 import { ChevronLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -35,14 +36,17 @@ export function Sidebar({
         <h2 className={cn("font-semibold", !isOpen && "hidden")}>
           Stream Manager
         </h2>
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={onClose}
-          className="h-8 w-8"
-        >
-          <ChevronLeft className="h-4 w-4" />
-        </Button>
+        <div className="flex items-center gap-2">
+          {isOpen && <ShareButton streams={streams} />}
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={onClose}
+            className="h-8 w-8"
+          >
+            <ChevronLeft className="h-4 w-4" />
+          </Button>
+        </div>
       </div>
 
       {isOpen && (
