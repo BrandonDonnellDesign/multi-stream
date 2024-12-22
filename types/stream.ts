@@ -3,4 +3,5 @@ export type Stream = {
   platform: "twitch" | "kick";
   channel: string;
   visible: boolean;
+  chatEnabled: boolean;
 };

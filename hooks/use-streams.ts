@@ -26,6 +26,7 @@ export function useStreams() {
         platform,
         channel,
         visible: true,
+        chatEnabled: false,
       },
     ]);
   }, []);
@@ -42,6 +43,20 @@ export function useStreams() {
     );
   }, []);
 
+  const toggleStreamChat = useCallback((id: string) => {
+    setStreams((prev) =>
+      prev.map((stream) =>
+        stream.id === id ? { ...stream, chatEnabled: !stream.chatEnabled } : stream
+      )
+    );
+  }, []);
+
+  const toggleAllChats = useCallback((enabled: boolean) => {
+    setStreams((prev) =>
+      prev.map((stream) => ({ ...stream, chatEnabled: enabled }))
+    );
+  }, []);
+
   const refreshStream = useCallback((id: string) => {
     setStreams((prev) =>
       prev.map((stream) =>
@@ -52,11 +67,18 @@ export function useStreams() {
     );
   }, []);
 
+  const reorderStreams = useCallback((reorderedStreams: Stream[]) => {
+    setStreams(reorderedStreams);
+  }, []);
+
   return {
     streams,
     addStream,
     removeStream,
     toggleStreamVisibility,
+    toggleStreamChat,
+    toggleAllChats,
     refreshStream,
+    reorderStreams,
   };
 }

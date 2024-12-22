@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { ShareButton } from "@/components/share/share-button";
 import { ChevronLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { ChatControls } from "@/components/chat/chat-controls";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -12,8 +13,11 @@ interface SidebarProps {
   onClose: () => void;
   onAddStream: (platform: "twitch" | "kick", channel: string) => void;
   onToggleVisibility: (id: string) => void;
+  onToggleChat: (id: string) => void;
+  onToggleAllChats: (enabled: boolean) => void;
   onRefresh: (id: string) => void;
   onRemove: (id: string) => void;
+  onReorder: (streams: Stream[]) => void;
 }
 
 export function Sidebar({
@@ -22,8 +26,11 @@ export function Sidebar({
   onClose,
   onAddStream,
   onToggleVisibility,
+  onToggleChat,
+  onToggleAllChats,
   onRefresh,
   onRemove,
+  onReorder,
 }: SidebarProps) {
   return (
     <div
@@ -52,11 +59,19 @@ export function Sidebar({
       {isOpen && (
         <div className="flex-1 overflow-auto p-4">
           <StreamForm onAdd={onAddStream} />
+          <div className="mb-4">
+            <ChatControls 
+              streams={streams}
+              onToggleAllChats={onToggleAllChats}
+            />
+          </div>
           <StreamList
             streams={streams}
             onToggleVisibility={onToggleVisibility}
+            onToggleChat={onToggleChat}
             onRefresh={onRefresh}
             onRemove={onRemove}
+            onReorder={onReorder}
           />
         </div>
       )}

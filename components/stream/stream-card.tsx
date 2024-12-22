@@ -1,10 +1,11 @@
 import { Stream } from "@/types/stream";
 import { Button } from "@/components/ui/button";
-import { Eye, EyeOff, RefreshCw, X } from "lucide-react";
+import { Eye, EyeOff, MessageSquare, RefreshCw, X } from "lucide-react";
 
 interface StreamCardProps {
   stream: Stream;
   onToggleVisibility: (id: string) => void;
+  onToggleChat: (id: string) => void;
   onRefresh: (id: string) => void;
   onRemove: (id: string) => void;
 }
@@ -12,6 +13,7 @@ interface StreamCardProps {
 export function StreamCard({
   stream,
   onToggleVisibility,
+  onToggleChat,
   onRefresh,
   onRemove,
 }: StreamCardProps) {
@@ -35,6 +37,14 @@ export function StreamCard({
           ) : (
             <EyeOff className="h-4 w-4" />
           )}
+        </Button>
+        <Button
+          variant={stream.chatEnabled ? "default" : "ghost"}
+          size="icon"
+          onClick={() => onToggleChat(stream.id)}
+          className="h-8 w-8"
+        >
+          <MessageSquare className="h-4 w-4" />
         </Button>
         <Button
           variant="ghost"
