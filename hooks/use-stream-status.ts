@@ -1,17 +1,19 @@
 "use client";
+"use client";
 
 import { useState, useEffect } from 'react';
 import { checkStreamStatus } from '@/lib/twitch-api';
+import { checkKickStreamStatus } from '@/lib/kick-api';
 import { Stream } from '@/types/stream';
 
 export function useStreamStatus(stream: Stream) {
   const [isLive, setIsLive] = useState(false);
 
   useEffect(() => {
-    if (stream.platform !== 'twitch') return;
-
     const checkStatus = async () => {
-      const status = await checkStreamStatus(stream.channel);
+      const status = stream.platform === 'twitch' 
+        ? await checkStreamStatus(stream.channel)
+        : await checkKickStreamStatus(stream.channel);
       setIsLive(status);
     };
 
