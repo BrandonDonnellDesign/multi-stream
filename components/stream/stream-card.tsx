@@ -1,6 +1,8 @@
 import { Stream } from "@/types/stream";
 import { Button } from "@/components/ui/button";
 import { Eye, EyeOff, MessageSquare, RefreshCw, X } from "lucide-react";
+import { LiveIndicator } from "./live-indicator";
+import { useStreamStatus } from "@/hooks/use-stream-status";
 
 interface StreamCardProps {
   stream: Stream;
@@ -17,10 +19,15 @@ export function StreamCard({
   onRefresh,
   onRemove,
 }: StreamCardProps) {
+  const isLive = useStreamStatus(stream);
+
   return (
     <div className="flex items-center justify-between bg-accent/20 p-3 rounded-lg hover:bg-accent/30 transition-colors">
       <div>
-        <p className="font-medium">{stream.channel}</p>
+        <div className="flex items-center gap-2">
+          <p className="font-medium">{stream.channel}</p>
+          <LiveIndicator isLive={isLive} />
+        </div>
         <p className="text-sm text-muted-foreground capitalize">
           {stream.platform}
         </p>

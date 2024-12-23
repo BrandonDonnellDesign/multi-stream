@@ -4,7 +4,6 @@ import { Stream } from "@/types/stream";
 import { StreamPlayer } from "./stream-player";
 import { EmptyState } from "../ui/empty-state";
 import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
-import { useAudioControl } from "@/hooks/use-audio-control";
 
 interface StreamGridProps {
   streams: Stream[];
@@ -12,8 +11,6 @@ interface StreamGridProps {
 }
 
 export function StreamGrid({ streams, onReorder }: StreamGridProps) {
-  const { handleFullscreenAudio } = useAudioControl();
-
   if (streams.length === 0) {
     return <EmptyState message="Add streams from the sidebar to get started" />;
   }
@@ -55,10 +52,7 @@ export function StreamGrid({ streams, onReorder }: StreamGridProps) {
                     {...provided.dragHandleProps}
                     className="relative"
                   >
-                    <StreamPlayer 
-                      stream={stream} 
-                      onFullscreen={(streamId) => handleFullscreenAudio(streamId, streams)}
-                    />
+                    <StreamPlayer stream={stream} />
                   </div>
                 )}
               </Draggable>
