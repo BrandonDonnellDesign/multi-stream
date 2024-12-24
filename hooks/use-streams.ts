@@ -38,7 +38,7 @@ export function useStreams() {
       const interval = setInterval(checkAllStreamsStatus, 120000);
       return () => clearInterval(interval);
     }
-  }, [streams.length]);
+  }, [streams]);
 
   useEffect(() => {
     if (!isInitialized) {
