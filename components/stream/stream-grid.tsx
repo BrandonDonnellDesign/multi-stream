@@ -4,6 +4,7 @@ import { Stream } from "@/types/stream";
 import { StreamPlayer } from "./stream-player";
 import { EmptyState } from "../ui/empty-state";
 import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
+import { useVisibleStreams } from "@/hooks/use-visible-streams";
 
 interface StreamGridProps {
   streams: Stream[];
@@ -11,10 +12,10 @@ interface StreamGridProps {
 }
 
 export function StreamGrid({ streams, onReorder }: StreamGridProps) {
-  const visibleStreams = streams.filter(stream => stream.visible);
+  const visibleStreams = useVisibleStreams(streams);
 
   if (visibleStreams.length === 0) {
-    return <EmptyState message="No visible streams. Enable streams from the sidebar to get started" />;
+    return <EmptyState message="No live streams available. Add streams from the sidebar to get started" />;
   }
 
   const gridCols = Math.ceil(Math.sqrt(visibleStreams.length));
