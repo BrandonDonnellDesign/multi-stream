@@ -37,6 +37,7 @@ export function decodeStreamsFromUrl(): Stream[] {
         platform: platform as "twitch" | "kick",
         channel,
         visible: true,
+        chatEnabled: true, // or false, depending on your default value
       };
     });
   } catch (error) {
