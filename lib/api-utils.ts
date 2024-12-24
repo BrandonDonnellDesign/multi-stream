@@ -1,6 +1,5 @@
 "use client";
 
-// Shared API utilities
 export function handleApiError(error: unknown, context: string): void {
   if (error instanceof Error) {
     console.error(`${context}:`, error.message);
@@ -12,20 +11,20 @@ export function handleApiError(error: unknown, context: string): void {
 export async function fetchWithTimeout(
   url: string, 
   options: RequestInit = {}, 
-  timeout = 5000
+  timeoutMs: number = 5000
 ): Promise<Response> {
   const controller = new AbortController();
-  const id = setTimeout(() => controller.abort(), timeout);
+  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
 
   try {
     const response = await fetch(url, {
       ...options,
       signal: controller.signal
     });
-    clearTimeout(id);
+    clearTimeout(timeoutId);
     return response;
   } catch (error) {
-    clearTimeout(id);
+    clearTimeout(timeoutId);
     throw error;
   }
 }

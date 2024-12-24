@@ -5,8 +5,7 @@ import { handleApiError, fetchWithTimeout } from './api-utils';
 export async function checkKickStreamStatus(channelName: string): Promise<boolean> {
   try {
     const response = await fetchWithTimeout(
-      `https://kick.com/api/v2/channels/${channelName}`,
-      { timeout: 5000 }
+      `https://kick.com/api/v2/channels/${channelName}`
     );
 
     if (!response.ok) {
