@@ -11,16 +11,18 @@ interface StreamGridProps {
 }
 
 export function StreamGrid({ streams, onReorder }: StreamGridProps) {
-  if (streams.length === 0) {
-    return <EmptyState message="Add streams from the sidebar to get started" />;
+  const visibleStreams = streams.filter(stream => stream.visible);
+
+  if (visibleStreams.length === 0) {
+    return <EmptyState message="No visible streams. Enable streams from the sidebar to get started" />;
   }
 
-  const gridCols = Math.ceil(Math.sqrt(streams.length));
+  const gridCols = Math.ceil(Math.sqrt(visibleStreams.length));
 
   const handleDragEnd = (result: any) => {
     if (!result.destination) return;
 
-    const items = Array.from(streams);
+    const items = Array.from(visibleStreams);
     const [reorderedItem] = items.splice(result.source.index, 1);
     items.splice(result.destination.index, 0, reorderedItem);
 
@@ -39,7 +41,7 @@ export function StreamGrid({ streams, onReorder }: StreamGridProps) {
               gridTemplateColumns: `repeat(${gridCols}, 1fr)`,
             }}
           >
-            {streams.map((stream, index) => (
+            {visibleStreams.map((stream, index) => (
               <Draggable
                 key={stream.id}
                 draggableId={stream.id}

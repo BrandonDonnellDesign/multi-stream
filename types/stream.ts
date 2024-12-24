@@ -4,4 +4,6 @@ export type Stream = {
   channel: string;
   visible: boolean;
   chatEnabled: boolean;
+  manuallyHidden?: boolean; // Track if user manually hid the stream
+  isLive?: boolean; // Track live status
 };
