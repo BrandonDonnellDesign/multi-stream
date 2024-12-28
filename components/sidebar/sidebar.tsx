@@ -36,7 +36,7 @@ export function Sidebar({
     <div
       className={cn(
         "h-full bg-background border-r border-border transition-all duration-300 flex flex-col",
-        isOpen ? "w-80" : "w-16"
+        isOpen ? "w-90" : "w-16"
       )}
     >
       <div className="flex items-center justify-between p-4 border-b">
