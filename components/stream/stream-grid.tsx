@@ -18,7 +18,7 @@ export function StreamGrid({ streams, onReorder }: StreamGridProps) {
     return <EmptyState message="No live streams available. Add streams from the sidebar to get started" />;
   }
 
-  const gridCols = Math.ceil(Math.sqrt(visibleStreams.length));
+  const gridCols = Math.min(3, Math.ceil(visibleStreams.length));
 
   const handleDragEnd = (result: any) => {
     if (!result.destination) return;
@@ -37,7 +37,7 @@ export function StreamGrid({ streams, onReorder }: StreamGridProps) {
           <div
             {...provided.droppableProps}
             ref={provided.innerRef}
-            className="grid h-full"
+            className="grid h-full grid-cols-4"
             style={{
               gridTemplateColumns: `repeat(${gridCols}, 1fr)`,
             }}
