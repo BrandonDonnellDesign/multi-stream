@@ -18,7 +18,7 @@ export function StreamGrid({ streams, onReorder }: StreamGridProps) {
     return <EmptyState message="No live streams available. Add streams from the sidebar to get started" />;
   }
 
-  const gridCols = Math.min(4, Math.ceil(visibleStreams.length));
+  const gridCols = Math.min(3, Math.ceil(visibleStreams.length));
 
   const handleDragEnd = (result: any) => {
     if (!result.destination) return;
