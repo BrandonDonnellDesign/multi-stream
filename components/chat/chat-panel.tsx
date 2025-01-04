@@ -57,7 +57,7 @@ export function ChatPanel({ streams: allStreams, isOpen, onToggle }: ChatPanelPr
               key={activeStream.id}
               src={activeStream.platform === "twitch" 
                 ? `https://www.twitch.tv/embed/${activeStream.channel}/chat?parent=${window.location.hostname}&darkpopout`
-                : `https://kick.com/${activeStream.channel}/chat`}
+                : `https://kick.com/popout/${activeStream.channel}/chat`}
               className="w-full h-full"
             />
           </div>

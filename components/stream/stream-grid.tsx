@@ -40,6 +40,7 @@ export function StreamGrid({ streams, onReorder }: StreamGridProps) {
             className="grid h-full"
             style={{
               gridTemplateColumns: `repeat(${gridCols}, 1fr)`,
+              aspectRatio: "16/9",
             }}
           >
             {visibleStreams.map((stream, index) => (
@@ -53,7 +54,7 @@ export function StreamGrid({ streams, onReorder }: StreamGridProps) {
                     ref={provided.innerRef}
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
-                    className="relative"
+                    className="relative aspect-w-16 aspect-h-9"
                   >
                     <StreamPlayer stream={stream} />
                   </div>
