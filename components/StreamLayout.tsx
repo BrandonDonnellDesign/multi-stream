@@ -124,7 +124,7 @@ export default function StreamLayout() {
           </button>
         )}
 
-        <div className="h-full p-4">
+        <div className="h-full p-4 flex justify-center items-center">
           <StreamView streams={streams.filter((s) => s.visible)} />
         </div>
       </div>

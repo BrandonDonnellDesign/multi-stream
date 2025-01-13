@@ -40,7 +40,7 @@ export function StreamGrid({ streams, onReorder }: StreamGridProps) {
             className="grid h-full"
             style={{
               gridTemplateColumns: `repeat(${gridCols}, 1fr)`,
-              // aspectRatio: "16/9", Need to figure out how make the grid center when only 1 or over 3 streams
+
             }}
           >
             {visibleStreams.map((stream, index) => (
@@ -54,7 +54,7 @@ export function StreamGrid({ streams, onReorder }: StreamGridProps) {
                     ref={provided.innerRef}
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
-                    className="relative aspect-w-16 aspect-h-9"
+                    className="relative aspect-w-16 aspect-h-9 flex justify-center items-center"
                   >
                     <StreamPlayer stream={stream} />
                   </div>
