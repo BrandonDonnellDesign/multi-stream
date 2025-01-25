@@ -19,7 +19,6 @@ export default function StreamView({ streams }: StreamViewProps) {
   const gridStyle = {
     display: "grid",
     gridTemplateColumns: `repeat(${gridCols}, 1fr)`,
-    gap: "1rem",
     height: "100%",
   };
 

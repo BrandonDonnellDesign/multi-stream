@@ -4,5 +4,8 @@ import { Stream } from "@/types/stream";
 
 export function useStreamVisibility(stream: Stream, isLive: boolean) {
   // If stream is not live, it should not be visible
-  return isLive ? stream.visible : false;
+  return {
+    visible: isLive ? stream.visible : false,
+    chatEnabled: isLive ? stream.chatEnabled : false
+  };
 }
