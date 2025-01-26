@@ -12,8 +12,7 @@ export function LiveIndicator({ isLive, className }: LiveIndicatorProps) {
 
   return (
     <div className={cn("flex items-center gap-1.5", className)}>
-      <div className="h-2 w-2 rounded-full bg-red-500 animate-pulse" />
-      <span className="text-xs font-medium text-red-500">LIVE</span>
+      <span className="text-xs font-medium text-red-500 animate-pulse">LIVE</span>
     </div>
   );
 }
