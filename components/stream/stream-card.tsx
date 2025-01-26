@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Eye, EyeOff, MessageSquare, RefreshCw, X } from "lucide-react";
 import { LiveIndicator } from "./live-indicator";
 import { useStreamStatus } from "@/hooks/use-stream-status";
-import { KickIcon, TwitchIcon } from "./stream-icons";
+import { KickIcon, TwitchIcon } from "../ui/stream-icons";
 
 interface StreamCardProps {
   stream: Stream;
@@ -31,16 +31,9 @@ export function StreamCard({
           ) : stream.platform === "twitch" ? (
             <TwitchIcon />
           ) : null}
-          <p className="font-medium">{stream.channel}</p>
+          <p className="font-medium capitalize">{stream.channel}</p>
           <LiveIndicator isLive={isLive} />
         </div>
-        {/* <p className="text-sm text-muted-foreground capitalize">
-          {stream.platform === "kick" ? (
-            <KickIcon />
-          ) : stream.platform === "twitch" ? (
-            <TwitchIcon />
-          ) : null}
-        </p> */}
       </div>
       <div className="flex gap-1">
         <Button
