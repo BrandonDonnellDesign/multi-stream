@@ -19,16 +19,31 @@ export function useStreams() {
   }, [isInitialized]);
 
   const addStream = useCallback((platform: "twitch" | "kick", channel: string) => {
-    setStreams((prev) => [
-      ...prev,
-      {
-        id: `${platform}-${channel}-${Date.now()}`,
-        platform,
-        channel,
-        visible: true,
-        chatEnabled: false,
-      },
-    ]);
+    setStreams((prev) => {
+      // Check if stream already exists (case insensitive)
+      const streamExists = prev.some(
+        (s) => 
+          s.platform === platform && 
+          s.channel.toLowerCase() === channel.toLowerCase()
+      );
+
+      // If stream already exists, return unchanged array
+      if (streamExists) {
+        return prev;
+      }
+
+      // Add new stream if it doesn't exist
+      return [
+        ...prev,
+        {
+          id: `${platform}-${channel}-${Date.now()}`,
+          platform,
+          channel,
+          visible: true,
+          chatEnabled: false,
+        },
+      ];
+    });
   }, []);
 
   const removeStream = useCallback((id: string) => {

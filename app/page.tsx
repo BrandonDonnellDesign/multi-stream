@@ -26,7 +26,7 @@ export default function Home() {
   const visibleStreams = streams.filter((s) => s.visible);
 
   return (
-    <div className="flex h-screen bg-background">
+    <div className="flex h-screen overflow-hidden bg-background">
       <Sidebar
         isOpen={isSidebarOpen}
         streams={streams}
@@ -40,7 +40,7 @@ export default function Home() {
         onReorder={reorderStreams}
       />
 
-      <main className="flex-1 relative">
+      <main className="flex-1 min-h-0 relative">
         {!isSidebarOpen && (
           <Button
             variant="outline"
@@ -53,7 +53,7 @@ export default function Home() {
         )}
 
         <div className="flex h-full">
-          <div className="flex-1">
+          <div className="flex-1 min-h-0">
             <StreamGrid streams={visibleStreams} onReorder={reorderStreams} />
           </div>
           

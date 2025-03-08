@@ -18,7 +18,7 @@ export function PlatformPlayer({ stream, className }: PlatformPlayerProps) {
 
   return (
     <div className={cn(
-      "relative w-full h-full min-h-[300px]",
+      "relative w-full h-full",
       stream.platform === "kick" && "aspect-video",
       className
     )}>
@@ -27,8 +27,7 @@ export function PlatformPlayer({ stream, className }: PlatformPlayerProps) {
         allowFullScreen
         className={cn(
           "absolute inset-0 w-full h-full",
-          // Apply specific styles for Kick streams
-          stream.platform === "kick" && "aspect-video object-contain"
+          stream.platform === "kick" && "object-cover"
         )}
       />
     </div>

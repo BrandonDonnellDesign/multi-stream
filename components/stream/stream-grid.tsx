@@ -5,6 +5,7 @@ import { StreamPlayer } from "./stream-player";
 import { EmptyState } from "../ui/empty-state";
 import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
 import { useVisibleStreams } from "@/hooks/use-visible-streams";
+import { cn } from "@/lib/utils";
 
 interface StreamGridProps {
   streams: Stream[];
@@ -18,7 +19,14 @@ export function StreamGrid({ streams, onReorder }: StreamGridProps) {
     return <EmptyState message="No live streams available. Add streams from the sidebar to get started" />;
   }
 
-  const gridCols = Math.min(3, Math.ceil(visibleStreams.length));
+  // Calculate grid columns based on number of streams
+  const getGridCols = (count: number) => {
+    if (count <= 1) return 1;
+    if (count <= 4) return 2;
+    return 3;
+  };
+
+  const gridCols = getGridCols(visibleStreams.length);
 
   const handleDragEnd = (result: any) => {
     if (!result.destination) return;
@@ -37,10 +45,15 @@ export function StreamGrid({ streams, onReorder }: StreamGridProps) {
           <div
             {...provided.droppableProps}
             ref={provided.innerRef}
-            className="grid h-full"
+            className={cn(
+              "w-full h-full",
+              visibleStreams.length === 1 
+                ? "flex items-center justify-center" 
+                : "grid"
+            )}
             style={{
-              gridTemplateColumns: `repeat(${gridCols}, 1fr)`,
-
+              gridTemplateColumns: visibleStreams.length > 1 ? `repeat(${gridCols}, 1fr)` : undefined,
+              gridTemplateRows: visibleStreams.length === 2 ? "repeat(1, 1fr)" : "auto",
             }}
           >
             {visibleStreams.map((stream, index) => (
@@ -54,7 +67,15 @@ export function StreamGrid({ streams, onReorder }: StreamGridProps) {
                     ref={provided.innerRef}
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
-                    className="relative aspect-w-16 aspect-h-9 flex justify-center items-center"
+                    className={cn(
+                      "relative",
+                      visibleStreams.length === 1 
+                        ? "w-[90%] max-w-[1600px] aspect-video" 
+                        : "w-full h-full"
+                    )}
+                    style={{
+                      ...provided.draggableProps.style,
+                    }}
                   >
                     <StreamPlayer stream={stream} />
                   </div>
