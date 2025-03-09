@@ -22,8 +22,8 @@ export function StreamGrid({ streams, onReorder }: StreamGridProps) {
   // Calculate grid columns based on number of streams
   const getGridCols = (count: number) => {
     if (count <= 1) return 1;
-    if (count <= 4) return 2;
-    return 3;
+    if (count <= 2) return 2;
+    if (count <= 3) return 3;
   };
 
   const gridCols = getGridCols(visibleStreams.length);
