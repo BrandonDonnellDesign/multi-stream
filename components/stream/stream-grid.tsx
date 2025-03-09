@@ -70,7 +70,7 @@ export function StreamGrid({ streams, onReorder }: StreamGridProps) {
                     className={cn(
                       "relative",
                       visibleStreams.length === 1 
-                        ? "w-[90%] max-w-[1600px] aspect-video" 
+                        ? "w-[90%] max-w-[2250px] aspect-video" 
                         : "w-full h-full"
                     )}
                     style={{
