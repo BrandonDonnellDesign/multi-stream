@@ -13,7 +13,10 @@ export function getStreamUrl(stream: Stream): string {
 export function encodeStreamsToUrl(streams: Stream[]): string {
   const streamParams = streams
     .filter(s => s.visible)
-    .map(s => `${s.platform}:${s.channel}`)
+    .map(s => {
+      const platformShort = s.platform === "twitch" ? "t" : s.platform === "kick" ? "k" : s.platform;
+      return `${platformShort}:${s.channel}`;
+    })
     .join(',');
   
   const baseUrl = window.location.origin + window.location.pathname;
@@ -28,10 +31,11 @@ export function decodeStreamsFromUrl(): Stream[] {
     if (!streamParam) return [];
     
     return streamParam.split(',').map(streamStr => {
-      const [platform, channel] = streamStr.split(':');
-      if (!platform || !channel || !['twitch', 'kick'].includes(platform)) {
+      const [platformShort, channel] = streamStr.split(':');
+      if (!platformShort || !channel || !['t', 'k'].includes(platformShort)) {
         throw new Error('Invalid stream format');
       }
+      const platform = platformShort === "t" ? "twitch" : platformShort === "k" ? "kick" : platformShort;
       return {
         id: `${platform}-${channel}-${Date.now()}`,
         platform: platform as "twitch" | "kick",
