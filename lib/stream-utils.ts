@@ -1,3 +1,4 @@
+import { getVideoInfo } from "@/lib/youtube-api";
 import { Stream } from "@/types/stream";
 
 export function getStreamUrl(stream: Stream): string {
@@ -50,4 +51,23 @@ export function decodeStreamsFromUrl(): Stream[] {
     console.error('Error decoding streams from URL:', error);
     return [];
   }
+}
+
+export async function getStreamData(stream: Stream): Promise<Partial<Stream>> {
+  if (stream.platform === "youtube") {
+    try {
+      const videoData = await getVideoInfo(stream.channel);
+      return {
+        isLive: videoData.live,
+        title: videoData.title,
+      };
+    } catch (error) {
+      console.error("Error fetching YouTube video data:", error);
+      return {
+        isLive: false,
+        title: "Offline",
+      };
+    }
+  }
+  return {};
 }
