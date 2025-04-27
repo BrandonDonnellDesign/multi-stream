@@ -130,6 +130,9 @@
     }
 }
 @layer base {
+  body {
+    background-color: #000000;
+  }
   * {
     @apply border-border font-sans;
   }

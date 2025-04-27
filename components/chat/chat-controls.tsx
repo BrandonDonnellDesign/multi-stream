@@ -14,7 +14,7 @@ export function ChatControls({ streams, onToggleAllChats }: ChatControlsProps) {
   const someChatsEnabled = streams.some(s => s.chatEnabled);
 
   return (
-    <div className="rounded-xl shadow-md">
+    <div className="p-4 rounded-xl shadow-md bg-secondary">
         <Button
             variant={someChatsEnabled ? "secondary" : "outline"}
             size="default"

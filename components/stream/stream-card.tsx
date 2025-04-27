@@ -23,7 +23,7 @@ export function StreamCard({
   const isLive = useStreamStatus(stream);
 
   return (
-    <div className="flex items-center justify-between bg-secondary p-5 rounded-lg shadow-md hover:shadow-lg transition-all">
+    <div className="flex items-center justify-between p-2 rounded-lg shadow-md hover:shadow-lg transition-all" style={{ backgroundColor: '#1e1e1e' }}>
       <div>
         <div className="flex items-center gap-2">
           {stream.platform === "kick" ? (
@@ -52,7 +52,7 @@ export function StreamCard({
           variant={stream.chatEnabled ? "default" : "ghost"}
           size="lg"
           onClick={() => onToggleChat(stream.id)}
-          className="h-9 w-9"
+          className="p-2"
         >
           <MessageSquare className="h-5 w-5" />
         </Button>

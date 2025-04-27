@@ -5,6 +5,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight, MessageSquare } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 
 interface ChatPanelProps {
   streams: Stream[];
@@ -31,11 +32,11 @@ export function ChatPanel({ streams: allStreams, isOpen, onToggle }: ChatPanelPr
 
   return (
     <div
-        className={cn(
-            "h-full transition-all duration-300 flex flex-col shadow-lg rounded-md",
-            isOpen ? "w-80 bg-background" : "w-0",
-            !isOpen && "hidden"
-      )}
+          className={cn(
+              "h-full transition-all duration-300 flex flex-col shadow-lg rounded-md",
+              isOpen ? "w-80 bg-background" : "w-0",
+          )}
+          
     >
       {isOpen && (
         <>

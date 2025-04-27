@@ -10,14 +10,14 @@ export function StreamPlayer({ stream }: StreamPlayerProps) {
   const streamUrl = getStreamUrl(stream);
 
   return (
-    <div className="relative w-full h-full rounded-2xl shadow-md">
+    <div className="relative w-full h-full shadow-md">
       <iframe
         src={streamUrl}
         frameBorder="0"
         allowFullScreen
         scrolling="no"
         className={cn(
-          "absolute inset-0 w-full h-full rounded-2xl",
+          "absolute inset-0 w-full h-full",
           stream.platform === "kick" && "object-fill",
           stream.platform === "twitch" &&
             "bg-secondary"

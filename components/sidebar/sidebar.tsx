@@ -37,7 +37,7 @@ export function Sidebar({
         className={cn(
             "h-full bg-secondary transition-all duration-300 flex flex-col",
             "border-r border-muted shadow-lg rounded-r-lg", // Added shadow and rounded border
-            isOpen ? "w-80" : "w-16"
+            isOpen ? "w-auto" : "w-16",
         )}
     >
         <div className="flex items-center justify-between p-6 border-b border-muted">

@@ -25,10 +25,12 @@ export function StreamGrid({ streams, onReorder }: StreamGridProps) {
   // Calculate grid columns based on number of streams
   const getGridCols = (count: number) => {
     if (count <= 1) return 1;
-    if (count <= 2) return 2;
-    if (count <= 3) return 3;
+    return Math.min(count, 3);
   };
 
+  
+
+  
   const gridCols = getGridCols(visibleStreams.length);
 
   const handleDragEnd = (result: any) => {
@@ -51,9 +53,9 @@ export function StreamGrid({ streams, onReorder }: StreamGridProps) {
             style={{
               gridTemplateColumns: visibleStreams.length > 1 ? `repeat(${gridCols}, 1fr)` : undefined,
               gridTemplateRows: visibleStreams.length === 2 ? "repeat(1, 1fr)" : "auto",
-            }}
-            className={cn(
-              "w-full h-full p-4 rounded-2xl",
+            }}            className={cn(           
+              "w-full h-full p-4 rounded-xl",
+              visibleStreams.length === 4 ? "grid" : "",
               visibleStreams.length === 1
                 ? "flex items-center justify-center"
                 : "grid gap-4"
@@ -72,8 +74,9 @@ export function StreamGrid({ streams, onReorder }: StreamGridProps) {
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
                     className={cn(
-                      "relative rounded-2xl",
-                      visibleStreams.length === 1
+                      "relative",
+
+                      visibleStreams.length === 1 
                         ? "w-[90%] max-w-[2250px] aspect-video"
                         : ""
                     )}

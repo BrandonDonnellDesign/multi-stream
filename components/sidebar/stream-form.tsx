@@ -50,7 +50,7 @@ export function StreamForm({ onAdd }: StreamFormProps) {
             onChange={(e) => setChannel(e.target.value)}
             className="rounded-xl"
           />
-          <Button type="submit" className="rounded-xl">
+          <Button type="submit" className="rounded-xl text-white" style={{ backgroundColor: '#393939' }}>
             Add
           </Button>
         </div>
