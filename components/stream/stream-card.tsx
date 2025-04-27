@@ -23,52 +23,52 @@ export function StreamCard({
   const isLive = useStreamStatus(stream);
 
   return (
-    <div className="flex items-center justify-between bg-accent/20 p-3 rounded-lg hover:bg-accent/30 transition-colors">
+    <div className="flex items-center justify-between bg-secondary p-5 rounded-lg shadow-md hover:shadow-lg transition-all">
       <div>
         <div className="flex items-center gap-2">
           {stream.platform === "kick" ? (
-            <KickIcon />
+            <KickIcon className="h-6 w-6" />
           ) : stream.platform === "twitch" ? (
-            <TwitchIcon />
+            <TwitchIcon className="h-6 w-6" />
           ) : null}
-          <p className="font-medium capitalize">{stream.channel}</p>
+          <p className="font-medium capitalize text-lg">{stream.channel}</p>
           <LiveIndicator isLive={isLive} />
         </div>
       </div>
       <div className="flex gap-1">
         <Button
           variant="ghost"
-          size="icon"
+          size="lg"
           onClick={() => onToggleVisibility(stream.id)}
-          className="h-8 w-8"
+          className="p-2"
         >
           {stream.visible ? (
-            <Eye className="h-4 w-4" />
+            <Eye className="h-6 w-6" />
           ) : (
-            <EyeOff className="h-4 w-4" />
+            <EyeOff className="h-6 w-6" />
           )}
         </Button>
         <Button
           variant={stream.chatEnabled ? "default" : "ghost"}
-          size="icon"
+          size="lg"
           onClick={() => onToggleChat(stream.id)}
-          className="h-8 w-8"
+          className="h-9 w-9"
         >
-          <MessageSquare className="h-4 w-4" />
+          <MessageSquare className="h-5 w-5" />
         </Button>
         <Button
           variant="ghost"
-          size="icon"
+          size="lg"
           onClick={() => onRefresh(stream.id)}
-          className="h-8 w-8"
+          className="p-2"
         >
-          <RefreshCw className="h-4 w-4" />
+          <RefreshCw className="h-6 w-6" />
         </Button>
         <Button
           variant="ghost"
-          size="icon"
+          size="lg"
           onClick={() => onRemove(stream.id)}
-          className="h-8 w-8 text-destructive hover:text-destructive"
+          className="p-2 text-destructive hover:text-destructive"
         >
           <X className="h-4 w-4" />
         </Button>

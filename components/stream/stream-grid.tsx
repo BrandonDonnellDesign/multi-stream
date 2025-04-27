@@ -1,11 +1,10 @@
 "use client";
 
 import { Stream } from "@/types/stream";
+import { cn } from "@/lib/utils";
 import { StreamPlayer } from "./stream-player";
-import { EmptyState } from "../ui/empty-state";
 import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
 import { useVisibleStreams } from "@/hooks/use-visible-streams";
-import { cn } from "@/lib/utils";
 
 interface StreamGridProps {
   streams: Stream[];
@@ -16,7 +15,11 @@ export function StreamGrid({ streams, onReorder }: StreamGridProps) {
   const visibleStreams = useVisibleStreams(streams);
 
   if (visibleStreams.length === 0) {
-    return <EmptyState message="No live streams available. Add streams from the sidebar to get started" />;
+    return (
+      <div className="flex items-center justify-center h-full p-8">
+        <p className="text-muted-foreground text-center text-lg">No streams added yet. Use the sidebar to add new streams.</p>
+      </div>
+    );
   }
 
   // Calculate grid columns based on number of streams
@@ -45,16 +48,17 @@ export function StreamGrid({ streams, onReorder }: StreamGridProps) {
           <div
             {...provided.droppableProps}
             ref={provided.innerRef}
-            className={cn(
-              "w-full h-full",
-              visibleStreams.length === 1 
-                ? "flex items-center justify-center" 
-                : "grid"
-            )}
             style={{
               gridTemplateColumns: visibleStreams.length > 1 ? `repeat(${gridCols}, 1fr)` : undefined,
               gridTemplateRows: visibleStreams.length === 2 ? "repeat(1, 1fr)" : "auto",
             }}
+            className={cn(
+              "w-full h-full p-4 rounded-2xl",
+              visibleStreams.length === 1
+                ? "flex items-center justify-center"
+                : "grid gap-4"
+            )}
+
           >
             {visibleStreams.map((stream, index) => (
               <Draggable
@@ -68,10 +72,10 @@ export function StreamGrid({ streams, onReorder }: StreamGridProps) {
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
                     className={cn(
-                      "relative",
-                      visibleStreams.length === 1 
-                        ? "w-[90%] max-w-[2250px] aspect-video" 
-                        : "w-full h-full"
+                      "relative rounded-2xl",
+                      visibleStreams.length === 1
+                        ? "w-[90%] max-w-[2250px] aspect-video"
+                        : ""
                     )}
                     style={{
                       ...provided.draggableProps.style,

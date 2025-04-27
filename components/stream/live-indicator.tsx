@@ -11,8 +11,13 @@ export function LiveIndicator({ isLive, className }: LiveIndicatorProps) {
   if (!isLive) return null;
 
   return (
-    <div className={cn("flex items-center gap-1.5", className)}>
-      <span className="text-xs font-medium text-red-500 animate-pulse">LIVE</span>
+    <div className={cn("flex items-center", className)}>
+      <span
+        className="text-xs font-semibold uppercase text-white bg-destructive rounded-full px-2 py-1 relative"
+      >
+        <span className="absolute -inset-0.5 bg-destructive rounded-full animate-[ping_1.5s_ease-in-out_infinite]" />
+        <span className="relative">LIVE</span>
+      </span>
     </div>
   );
 }

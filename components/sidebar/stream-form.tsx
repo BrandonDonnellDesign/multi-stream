@@ -28,28 +28,33 @@ export function StreamForm({ onAdd }: StreamFormProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4 mb-6">
-      <Select
-        value={platform}
-        onValueChange={(value: "twitch" | "kick") => setPlatform(value)}
-      >
-        <SelectTrigger>
-          <SelectValue placeholder="Select Platform" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="twitch">Twitch</SelectItem>
-          <SelectItem value="kick">Kick</SelectItem>
-        </SelectContent>
-      </Select>
+    <div className="space-y-4 mb-6 p-6 rounded-2xl bg-muted shadow-lg">
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <Select
+          value={platform}
+          onValueChange={(value: "twitch" | "kick") => setPlatform(value)}
+        >
+          <SelectTrigger>
+            <SelectValue placeholder="Select Platform" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="twitch">Twitch</SelectItem>
+            <SelectItem value="kick">Kick</SelectItem>
+          </SelectContent>
+        </Select>
 
-      <div className="flex gap-2">
-        <Input
-          placeholder="Enter channel name"
-          value={channel}
-          onChange={(e) => setChannel(e.target.value)}
-        />
-        <Button type="submit">Add</Button>
-      </div>
-    </form>
+        <div className="flex gap-2">
+          <Input
+            placeholder="Enter channel name"
+            value={channel}
+            onChange={(e) => setChannel(e.target.value)}
+            className="rounded-xl"
+          />
+          <Button type="submit" className="rounded-xl">
+            Add
+          </Button>
+        </div>
+      </form>
+    </div>
   );
 }
