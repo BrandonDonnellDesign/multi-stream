@@ -40,7 +40,7 @@ export function Sidebar({
             isOpen ? "w-auto" : "w-16",
         )}
     >
-        <div className="flex items-center justify-between p-6 border-b border-muted">
+        <div className="flex items-center justify-between p-4 border-b border-muted">
             <h2 className={cn("font-bold text-lg", !isOpen && "hidden")}>
           Stream Manager
         </h2>
@@ -58,9 +58,9 @@ export function Sidebar({
       </div>
 
         {isOpen && (
-            <div className="flex-1 overflow-auto px-6 py-4">
+            <div className="flex-1 overflow-auto px-4 py-2">
                 <StreamForm onAdd={onAddStream} />
-                <div className="mb-4">
+                <div className="mb-2">
                     <ChatControls
                         streams={streams}
                         onToggleAllChats={onToggleAllChats}
