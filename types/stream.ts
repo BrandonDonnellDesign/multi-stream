@@ -1,9 +1,11 @@
+export type StreamPlatform = "youtube" | "twitch" | "kick";
+
 export type Stream = {
   id: string;
-  platform: "youtube" | "twitch" | "kick";
+  platform: StreamPlatform;
   channel: string;
   visible: boolean;
   chatEnabled: boolean;
-  manuallyHidden?: boolean; // Track if user manually hid the stream
+  manuallyHidden?: boolean; 
   isLive?: boolean; // Track live status
 };
