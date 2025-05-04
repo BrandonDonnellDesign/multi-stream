@@ -11,14 +11,15 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
+import { StreamPlatform } from "@/types/stream";
 interface StreamInputProps {
-  onAdd: (platform: "twitch" | "kick", channel: string) => void;
+  onAdd: (platform: StreamPlatform, channel: string) => void;
 }
 
 export default function StreamInput({ onAdd }: StreamInputProps) {
-  const [platform, setPlatform] = useState<"twitch" | "kick">("twitch");
+  const [platform, setPlatform] = useState<StreamPlatform>("twitch");
   const [channel, setChannel] = useState("");
-
+  
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (channel.trim()) {
@@ -31,12 +32,13 @@ export default function StreamInput({ onAdd }: StreamInputProps) {
     <form onSubmit={handleSubmit} className="space-y-4">
       <Select
         value={platform}
-        onValueChange={(value: "twitch" | "kick") => setPlatform(value)}
+        onValueChange={(value: StreamPlatform) => setPlatform(value)}
       >
         <SelectTrigger>
           <SelectValue placeholder="Select Platform" />
         </SelectTrigger>
         <SelectContent>
+          <SelectItem value="youtube">Youtube</SelectItem>
           <SelectItem value="twitch">Twitch</SelectItem>
           <SelectItem value="kick">Kick</SelectItem>
         </SelectContent>

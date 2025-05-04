@@ -34,47 +34,48 @@ export function Sidebar({
 }: SidebarProps) {
   return (
     <div
-      className={cn(
-        "h-full bg-background border-r border-border transition-all duration-300 flex flex-col",
-        isOpen ? "w-90" : "w-16"
-      )}
+        className={cn(
+            "h-full bg-secondary transition-all duration-300 flex flex-col",
+            "border-r border-muted shadow-lg rounded-r-lg", // Added shadow and rounded border
+            isOpen ? "w-auto" : "w-16",
+        )}
     >
-      <div className="flex items-center justify-between p-4 border-b">
-        <h2 className={cn("font-semibold", !isOpen && "hidden")}>
+        <div className="flex items-center justify-between p-4 border-b border-muted">
+            <h2 className={cn("font-bold text-lg", !isOpen && "hidden")}>
           Stream Manager
         </h2>
         <div className="flex items-center gap-2">
           {isOpen && <ShareButton streams={streams} />}
           <Button
             variant="ghost"
-            size="icon"
+            size="sm"
+            className={cn("h-8 w-8 p-0", isOpen ? "rotate-180" : "rotate-0")}          
             onClick={onClose}
-            className="h-8 w-8"
           >
             <ChevronLeft className="h-4 w-4" />
           </Button>
         </div>
       </div>
 
-      {isOpen && (
-        <div className="flex-1 overflow-auto p-4">
-          <StreamForm onAdd={onAddStream} />
-          <div className="mb-4">
-            <ChatControls 
-              streams={streams}
-              onToggleAllChats={onToggleAllChats}
-            />
-          </div>
-          <StreamList
-            streams={streams}
-            onToggleVisibility={onToggleVisibility}
-            onToggleChat={onToggleChat}
-            onRefresh={onRefresh}
-            onRemove={onRemove}
-            onReorder={onReorder}
-          />
-        </div>
-      )}
-    </div>
+        {isOpen && (
+            <div className="flex-1 overflow-auto px-4 py-2">
+                <StreamForm onAdd={onAddStream} />
+                <div className="mb-2">
+                    <ChatControls
+                        streams={streams}
+                        onToggleAllChats={onToggleAllChats}
+                    />
+                </div>
+                <StreamList
+                    streams={streams}
+                    onToggleVisibility={onToggleVisibility}
+                    onToggleChat={onToggleChat}
+                    onRefresh={onRefresh}
+                    onRemove={onRemove}
+                    onReorder={onReorder}
+                />
+            </div>
+        )}
+    </div>   
   );
 }
