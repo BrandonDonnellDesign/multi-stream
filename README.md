@@ -37,13 +37,13 @@ A live stream aggregator that lets you watch multiple streams from different pla
 1.  **Clone the Repository:**
 ```
 bash
-    git clone https://github.com/your-username/live-stream-aggregator.git
+    git clone https://github.com/BrandonDonnellDesign/multi-stream
     
 ```
 2.  **Navigate to the Project Directory:**
 ```
 bash
-    cd live-stream-aggregator
+    cd multi-stream
     
 ```
 3.  **Install Dependencies:**
