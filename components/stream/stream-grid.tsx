@@ -58,7 +58,7 @@ export function StreamGrid({ streams, onReorder }: StreamGridProps) {
               visibleStreams.length === 4 ? "grid" : "",
               visibleStreams.length === 1
                 ? "flex items-center justify-center"
-                : "grid gap-4"
+                : "grid gap-2"
             )}
 
           >
