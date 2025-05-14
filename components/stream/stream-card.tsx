@@ -1,7 +1,7 @@
 import { Stream } from "@/types/stream";
 import { Button } from "@/components/ui/button";
 import { Eye, EyeOff, MessageSquare, RefreshCw, X } from "lucide-react";
-import { LiveIndicator } from "./live-indicator";
+import { LiveIndicator } from "./live-indicator"; // Corrected import path
 import { useStreamStatus } from "@/hooks/use-stream-status";
 import { KickIcon, TwitchIcon } from "../ui/stream-icons";
 
@@ -11,6 +11,10 @@ interface StreamCardProps {
   onToggleChat: (id: string) => void;
   onRefresh: (id: string) => void;
   onRemove: (id: string) => void;
+}
+
+interface IconProps {
+  className?: string;
 }
 
 export function StreamCard({
