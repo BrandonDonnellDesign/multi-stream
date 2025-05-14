@@ -27,9 +27,9 @@ export function StreamCard({
   const isLive = useStreamStatus(stream);
 
   return (
-    <div className="flex items-center justify-between p-2 rounded-lg shadow-md hover:shadow-lg transition-all" style={{ backgroundColor: '#1e1e1e' }}>
+    <div className="flex items-center justify-between px-2 py-1 rounded-xl shadow-md hover:shadow-lg transition-all" style={{ backgroundColor: '#1e1e1e' }}>
       <div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-4">
           {stream.platform === "kick" ? (
             <KickIcon className="h-6 w-6" />
           ) : stream.platform === "twitch" ? (

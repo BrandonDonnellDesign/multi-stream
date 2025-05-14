@@ -105,7 +105,7 @@ export function Sidebar({
                     onReorder={onReorder}
                 />
               
-              <div className="mt-auto border-t border-muted p-4">
+{/*               <div className="mt-auto border-t border-muted p-4">
                 <Dialog>
                     <DialogTrigger asChild>
                     <Button variant="ghost" className="w-full justify-start">Settings</Button>
@@ -125,7 +125,7 @@ export function Sidebar({
                                 >
                                     Theme
                                 </label>                                 
-                                <Select onValueChange={(value: string) => setTheme(value as "light" | "dark")} defaultValue={theme}>
+                                <Select onValueChange={setTheme} defaultValue={theme}>
                                     <SelectTrigger className="col-span-3">
                                         <SelectValue placeholder="Select a theme" />
                                     </SelectTrigger>
@@ -144,7 +144,7 @@ export function Sidebar({
                         
                     </DialogContent>
                 </Dialog>
-              </div>
+              </div> */}
             </div>
         )}
     </div>   
