@@ -8,4 +8,5 @@ export type Stream = {
   chatEnabled: boolean;
   manuallyHidden?: boolean; 
   isLive?: boolean; // Track live status
+  title?: string;
 };
