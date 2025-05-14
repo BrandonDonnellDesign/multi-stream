@@ -1,12 +1,16 @@
-export const KickIcon = () => (
+import { SVGProps } from 'react';
+
+interface IconProps extends SVGProps<SVGSVGElement> {}
+
+export const KickIcon = (props: IconProps) => (
   <svg
+    {...props}
     viewBox='0 0 512 512'
     xmlns='http://www.w3.org/2000/svg'
     fillRule='evenodd'
     clipRule='evenodd'
     strokeLinejoin='round'
-    strokeMiterlimit='2'
-    className='h-4 w-4'>
+    strokeMiterlimit='2'>
     <path
       d='M37 .036h164.448v113.621h54.71v-56.82h54.731V.036h164.448v170.777h-54.73v56.82h-54.711v56.8h54.71v56.82h54.73V512.03H310.89v-56.82h-54.73v-56.8h-54.711v113.62H37V.036z'
       fill='#53fc18'
@@ -15,15 +19,14 @@ export const KickIcon = () => (
 );
 
 export const TwitchIcon = () => (
-  <svg
+  <svg {...props}
     xmlns='http://www.w3.org/2000/svg'
     shapeRendering='geometricPrecision'
     textRendering='geometricPrecision'
     imageRendering='optimizeQuality'
     fillRule='evenodd'
     clipRule='evenodd'
-    viewBox='0 0 439 512.17'
-    className='h-4 w-4'>
+    viewBox='0 0 439 512.17'>
     <g fillRule='nonzero'>
       <path
         fill='#FEFEFE'
@@ -42,7 +45,7 @@ export const TwitchIcon = () => (
 );
 
 export const YoutubeIcon = () => (
-  <svg
+  <svg {...props}
     xmlns='http://www.w3.org/2000/svg'
     viewBox='0 0 333333 333333'
     shape-rendering='geometricPrecision'
