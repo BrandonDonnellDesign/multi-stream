@@ -1,5 +1,0 @@
-toml
-[build]
-  environment = {
-    NODE_VERSION = "24.0.2"
-  }
