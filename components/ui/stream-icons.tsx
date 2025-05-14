@@ -18,7 +18,7 @@ export const KickIcon = (props: IconProps) => (
   </svg>
 );
 
-export const TwitchIcon = () => (
+export const TwitchIcon = (props: IconProps) => (
   <svg {...props}
     xmlns='http://www.w3.org/2000/svg'
     shapeRendering='geometricPrecision'
@@ -44,7 +44,7 @@ export const TwitchIcon = () => (
   </svg>
 );
 
-export const YoutubeIcon = () => (
+export const YoutubeIcon = (props: IconProps) => (
   <svg {...props}
     xmlns='http://www.w3.org/2000/svg'
     viewBox='0 0 333333 333333'

@@ -12,8 +12,6 @@
     "node": "22.1.0"
   },
   "dependencies": {
-    "@eslint/config-array": "^0.20.0",
-    "@eslint/object-schema": "^2.1.6",
     "@hello-pangea/dnd": "^16.5.0",
     "@hookform/resolvers": "^3.9.0",
     "@humanwhocodes/config-array": "^0.13.0",
@@ -60,7 +58,6 @@
     "glob": "^11.0.2",
     "inflight": "^1.0.6",
     "input-otp": "^1.2.4",
-    "lru-cache": "^11.1.0",
     "lucide-react": "^0.446.0",
     "next": "^15.3.1",
     "next-themes": "^0.3.0",
@@ -79,8 +76,11 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@eslint/config-array": "^0.20.0",
+    "@eslint/object-schema": "^2.1.6",
     "@tailwindcss/postcss": "^4.1.4",
     "@types/classnames": "^2.3.0",
+    "lru-cache": "^11.1.0",
     "postcss": "^8.5.3",
     "tailwindcss": "^4.1.4"
   }
