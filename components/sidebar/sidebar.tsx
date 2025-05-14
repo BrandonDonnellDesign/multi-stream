@@ -125,7 +125,7 @@ export function Sidebar({
                                 >
                                     Theme
                                 </label>                                 
-                                <Select onValueChange={setTheme} defaultValue={theme}>
+                                <Select onValueChange={(value: string) => setTheme(value as "light" | "dark")} defaultValue={theme}>
                                     <SelectTrigger className="col-span-3">
                                         <SelectValue placeholder="Select a theme" />
                                     </SelectTrigger>
