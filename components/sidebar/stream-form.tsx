@@ -9,6 +9,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
+
 } from "@/components/ui/select";
 
 interface StreamFormProps {
@@ -40,6 +41,7 @@ export function StreamForm({ onAdd }: StreamFormProps) {
           <SelectContent>
             <SelectItem value="twitch">Twitch</SelectItem>
             <SelectItem value="kick">Kick</SelectItem>
+            <SelectItem value="youtube">YouTube</SelectItem>
           </SelectContent>
         </Select>
 

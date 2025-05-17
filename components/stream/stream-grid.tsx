@@ -52,7 +52,7 @@ export function StreamGrid({ streams, onReorder }: StreamGridProps) {
             ref={provided.innerRef}
             style={{
               gridTemplateColumns: visibleStreams.length > 1 ? `repeat(${gridCols}, 1fr)` : undefined,
-              gridTemplateRows: visibleStreams.length === 2 ? "repeat(1, 1fr)" : "auto",
+              gridTemplateRows: visibleStreams.length === 2 || visibleStreams.length === 3 ? "repeat(1, 1fr)" : "auto",
             }}            className={cn(           
               "w-full h-full p-4 rounded-xl",
               visibleStreams.length === 4 ? "grid" : "",
@@ -77,7 +77,8 @@ export function StreamGrid({ streams, onReorder }: StreamGridProps) {
                       "relative",
 
                       visibleStreams.length === 1 
-                        ? "w-[90%] max-w-[2250px] aspect-video"
+                        ? "w-[90%] max-w-[2250px] aspect-video" // Adjusted single stream size
+                        : visibleStreams.length === 3 ? "max-w-[1300px]"
                         : ""
                     )}
                     style={{
