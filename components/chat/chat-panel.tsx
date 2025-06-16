@@ -34,7 +34,7 @@ export function ChatPanel({ streams: allStreams, isOpen, onToggle }: ChatPanelPr
     <div
           className={cn(
               "h-full transition-all duration-300 flex flex-col shadow-lg rounded-md",
-              isOpen ? "w-80 bg-background" : "w-0",
+              isOpen ? "w-[10%] bg-background" : "w-0",
           )}
           
     >
