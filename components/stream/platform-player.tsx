@@ -32,10 +32,7 @@ export function PlatformPlayer({ stream, className }: PlatformPlayerProps) {
           title="Stream Player"
           frameBorder="0"
           className={cn(
-            "absolute inset-0 w-full h-full ",
-            stream.platform === "kick" ? "object-contain" : "object-cover",
-             stream.platform === "kick" && "p-4",
-            stream.platform === "twitch" && "bg-zinc-900"
+            "absolute inset-0 w-full h-full "
           )}
         />
       </div>

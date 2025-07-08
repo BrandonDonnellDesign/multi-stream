@@ -17,10 +17,7 @@ export function StreamPlayer({ stream }: StreamPlayerProps) {
         allowFullScreen
         scrolling="no"
         className={cn(
-          "absolute inset-0 w-full h-full",
-          stream.platform === "kick" && "object-fill",
-          stream.platform === "twitch" &&
-            "bg-secondary"
+          "absolute inset-0 w-full h-full"
         )}
       />
     </div>

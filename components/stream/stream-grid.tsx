@@ -28,9 +28,6 @@ export function StreamGrid({ streams, onReorder }: StreamGridProps) {
     return Math.min(count, 3);
   };
 
-  
-
-  
   const gridCols = getGridCols(visibleStreams.length);
 
   const handleDragEnd = (result: any) => {
@@ -58,7 +55,7 @@ export function StreamGrid({ streams, onReorder }: StreamGridProps) {
               visibleStreams.length === 4 ? "grid" : "",
               visibleStreams.length === 1
                 ? "flex items-center justify-center"
-                : "grid gap-2"
+                : "grid"
             )}
 
           >

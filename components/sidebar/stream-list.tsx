@@ -38,7 +38,7 @@ export function StreamList({
           <div
             {...provided.droppableProps}
             ref={provided.innerRef}
-            className="space-y-2 p-2"
+            className="space-y-1"
           >
             {streams.map((stream, index) => (
               <Draggable

@@ -29,7 +29,7 @@ export function StreamForm({ onAdd }: StreamFormProps) {
   };
 
   return (
-    <div className="space-y-4 mb-6 p-6 rounded-2xl bg-muted shadow-lg">
+    <div className="space-y-4 mb-2 p-2 rounded-2xl bg-muted shadow-lg">
       <form onSubmit={handleSubmit} className="space-y-4">
         <Select
           value={platform}
