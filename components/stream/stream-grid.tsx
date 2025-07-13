@@ -16,7 +16,7 @@ export function StreamGrid({ streams, onReorder }: StreamGridProps) {
 
   if (visibleStreams.length === 0) {
     return (
-      <div className="flex items-center justify-center h-full p-8">
+      <div className="flex items-center justify-center h-full">
         <p className="text-muted-foreground text-center text-lg">No streams added yet. Use the sidebar to add new streams.</p>
       </div>
     );
@@ -51,7 +51,7 @@ export function StreamGrid({ streams, onReorder }: StreamGridProps) {
               gridTemplateColumns: visibleStreams.length > 1 ? `repeat(${gridCols}, 1fr)` : undefined,
               gridTemplateRows: visibleStreams.length === 2 || visibleStreams.length === 3 ? "repeat(1, 1fr)" : "auto",
             }}            className={cn(           
-              "w-full h-full p-4 rounded-xl",
+              "w-full h-full rounded-xl",
               visibleStreams.length === 4 ? "grid" : "",
               visibleStreams.length === 1
                 ? "flex items-center justify-center"
