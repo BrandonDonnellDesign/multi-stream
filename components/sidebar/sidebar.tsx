@@ -49,15 +49,33 @@ export function Sidebar({
       if (storedMaxColumns) {
         setMaxColumns(parseInt(storedMaxColumns));
       }
+
+      // Restore streams from localStorage if available
+      const storedStreams = localStorage.getItem("sidebar-streams");
+      if (storedStreams) {
+        try {
+          const parsed = JSON.parse(storedStreams);
+          if (Array.isArray(parsed) && parsed.every(s => s.id && s.channel && s.platform)) {
+            // If you want to replace the prop, you need to lift state up. Otherwise, inform parent to use these.
+            // For now, just log or you can call onReorder(parsed) if you want to update parent.
+            onReorder(parsed);
+          }
+        } catch {}
+      }
     }, []);
   
     useEffect(() => {
       localStorage.setItem("theme", theme);
     }, [theme]);
-  
+
     useEffect(() => {
       localStorage.setItem("maxColumns", maxColumns.toString());
     }, [maxColumns]);
+
+    // Persist streams whenever they change
+    useEffect(() => {
+      localStorage.setItem("sidebar-streams", JSON.stringify(streams));
+    }, [streams]);
 
 
 

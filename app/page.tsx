@@ -10,7 +10,7 @@ import { useState } from "react";
 
 export default function Home() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const [isChatOpen, setIsChatOpen] = useState(true);
+  const [isChatOpen, setIsChatOpen] = useState(false);
   
   const {
     streams,

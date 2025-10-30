@@ -1,7 +1,7 @@
 "use client";
 
 import { Stream } from "@/types/stream";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight, MessageSquare } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -14,8 +14,9 @@ interface ChatPanelProps {
 }
 
 export function ChatPanel({ streams: allStreams, isOpen, onToggle }: ChatPanelProps) {
+  const streams = allStreams;
+
   const [activeStreamIndex, setActiveStreamIndex] = useState(0);
-  const streams = allStreams.filter(s => s.chatEnabled);
   const activeStream = streams[activeStreamIndex];
 
   const handlePrevious = () => {
@@ -24,6 +25,17 @@ export function ChatPanel({ streams: allStreams, isOpen, onToggle }: ChatPanelPr
 
   const handleNext = () => {
     setActiveStreamIndex((prev) => (prev + 1) % streams.length);
+  };
+  // Reset index if out of bounds
+  useEffect(() => {
+    if (activeStreamIndex >= streams.length && streams.length > 0) {
+      setActiveStreamIndex(0);
+    }
+  }, [activeStreamIndex, streams]);
+
+  // Remove a stream
+  const removeStream = (streamId: string) => {
+    // Logic to remove the stream from the props or state if needed
   };
 
   if (streams.length === 0) {
@@ -61,14 +73,33 @@ export function ChatPanel({ streams: allStreams, isOpen, onToggle }: ChatPanelPr
               key={activeStream.id}
               src={
                 activeStream.platform === "twitch"
-                  ? `https://www.twitch.tv/embed/${activeStream.channel}/chat?parent=${window.location.hostname}&darkpopout`
-                  : `https://kick.com/popout/${activeStream.channel}/chat`
+                ? `https://player.twitch.tv/?channel=${activeStream.channel}&parent=${window.location.hostname}`
+                : activeStream.platform === "youtube"
+                ? `https://www.youtube.com/embed/live_stream?channel=${activeStream.channel}`
+                : undefined
               }
-              className="w-full h-full border-none"
+              className="w-full h-full"
+              allowFullScreen
             />
           </div>
         </>
       )}
+      <div className="p-4 flex flex-col gap-2">
+        <Button onClick={onToggle} className="w-full">
+          {isOpen ? "Close Chat" : "Open Chat"}
+        </Button>
+        <Button
+          onClick={() => {
+            if (activeStream) {
+              removeStream(activeStream.id);
+            }
+          }}
+          variant="destructive"
+          className="w-full"
+        >
+          Remove This Stream
+        </Button>
+      </div>
     </div>
   );
 }
