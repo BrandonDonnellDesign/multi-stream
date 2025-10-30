@@ -74,7 +74,7 @@ export function StreamGrid({ streams, onReorder }: StreamGridProps) {
                       "relative",
 
                       visibleStreams.length === 1 
-                        ? "w-[90%] max-w-[2250px] aspect-video" // Adjusted single stream size
+                        ? "w-full h-full max-w-[100vw] max-h-[100vh] aspect-video mx-auto" // Responsive single stream size
                         : visibleStreams.length === 3 ? "max-w-[1300px]"
                         : ""
                     )}
