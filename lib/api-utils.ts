@@ -1,4 +1,3 @@
-"use client";
 
 export function handleApiError(error: unknown, context: string): void {
   if (error instanceof Error) {

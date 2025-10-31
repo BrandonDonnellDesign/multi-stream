@@ -1,4 +1,3 @@
-"use client";
 
 // Cache token in memory
 let accessToken: string | null = null;

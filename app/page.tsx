@@ -1,5 +1,4 @@
 "use client";
-
 import { Menu, MessageSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sidebar } from "@/components/sidebar/sidebar";
@@ -11,7 +10,6 @@ import { useState } from "react";
 export default function Home() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isChatOpen, setIsChatOpen] = useState(false);
-  
   const {
     streams,
     addStream,
@@ -33,11 +31,14 @@ export default function Home() {
         onClose={() => setIsSidebarOpen(!isSidebarOpen)}
         onAddStream={addStream}
         onToggleVisibility={toggleStreamVisibility}
-        onToggleChat={(id) => {
-          toggleStreamChat(id);
-          setIsChatOpen((prev) => !prev);
-        }}
-        onToggleAllChats={toggleAllChats}
+          onToggleChat={(id) => {
+            toggleStreamChat(id);
+            setIsChatOpen((prev) => !prev);
+          }}
+          onToggleAllChats={(enabled) => {
+            toggleAllChats(enabled);
+            setIsChatOpen(enabled);
+          }}
         onRefresh={refreshStream}
         onRemove={removeStream}
         onReorder={reorderStreams}
@@ -59,7 +60,6 @@ export default function Home() {
           <div className="flex-1 min-h-0">
             <StreamGrid streams={visibleStreams} onReorder={reorderStreams} />
           </div>
-          
           <ChatPanel 
             streams={streams}
             isOpen={isChatOpen}

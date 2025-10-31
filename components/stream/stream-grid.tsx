@@ -5,14 +5,17 @@ import { cn } from "@/lib/utils";
 import { StreamPlayer } from "./stream-player";
 import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
 import { useVisibleStreams } from "@/hooks/use-visible-streams";
+import { MessageSquare } from "lucide-react";
 
 interface StreamGridProps {
   streams: Stream[];
   onReorder: (streams: Stream[]) => void;
+  onToggleChat?: (id: string) => void;
 }
 
-export function StreamGrid({ streams, onReorder }: StreamGridProps) {
+export function StreamGrid({ streams, onReorder, onToggleChat }: StreamGridProps) {
   const visibleStreams = useVisibleStreams(streams);
+  const handleToggleChat = onToggleChat ?? (() => {});
 
   if (visibleStreams.length === 0) {
     return (

@@ -21,10 +21,13 @@ export function useVisibleStreams(streams: Stream[]) {
           };
         })
       );
-
-      setVisibleStreams(checkedStreams.filter(stream => 
-        stream.isLive && stream.visible
-      ));
+      // Only filter, do not reconstruct streams
+      setVisibleStreams(
+        streams.map((stream, idx) => ({
+          ...stream,
+          isLive: checkedStreams[idx].isLive
+        })).filter((stream) => stream.isLive && stream.visible)
+      );
     };
 
     checkStreamStatuses();

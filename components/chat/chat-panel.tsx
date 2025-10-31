@@ -1,4 +1,3 @@
-"use client";
 
 import { Stream } from "@/types/stream";
 import { useState, useEffect } from "react";
