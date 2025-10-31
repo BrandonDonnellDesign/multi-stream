@@ -33,7 +33,10 @@ export default function Home() {
         onClose={() => setIsSidebarOpen(!isSidebarOpen)}
         onAddStream={addStream}
         onToggleVisibility={toggleStreamVisibility}
-        onToggleChat={toggleStreamChat}
+        onToggleChat={(id) => {
+          toggleStreamChat(id);
+          setIsChatOpen((prev) => !prev);
+        }}
         onToggleAllChats={toggleAllChats}
         onRefresh={refreshStream}
         onRemove={removeStream}

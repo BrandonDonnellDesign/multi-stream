@@ -44,11 +44,10 @@ export function ChatPanel({ streams: allStreams, isOpen, onToggle }: ChatPanelPr
 
   return (
     <div
-          className={cn(
-              "h-full transition-all duration-300 flex flex-col shadow-lg rounded-md",
-              isOpen ? "w-[10%] bg-background" : "w-0",
-          )}
-          
+      className={cn(
+        "h-full transition-all duration-300 flex flex-col shadow-lg rounded-md",
+        isOpen ? "w-[10%] bg-background" : "w-0"
+      )}
     >
       {isOpen && (
         <>
@@ -57,49 +56,38 @@ export function ChatPanel({ streams: allStreams, isOpen, onToggle }: ChatPanelPr
               <MessageSquare className="h-5 w-5 text-primary" />
               <span className="font-semibold">{activeStream.channel} Chat</span>
             </div>
-            {streams.length > 1 && ( 
-              <div className="flex gap-1">
-                <Button variant="ghost" size="icon" onClick={handlePrevious} className="h-8 w-8">
-                  <ChevronLeft className="h-4 w-4" />
-                </Button>
-                <Button variant="ghost" size="icon" onClick={handleNext} className="h-8 w-8">
-                  <ChevronRight className="h-4 w-4" />
-                </Button>
-              </div>
-            )}
+            <div className="flex items-center gap-1">
+              {streams.length > 1 && (
+                <>
+                  <Button variant="ghost" size="icon" onClick={handlePrevious} className="h-8 w-8">
+                    <ChevronLeft className="h-4 w-4" />
+                  </Button>
+                  <Button variant="ghost" size="icon" onClick={handleNext} className="h-8 w-8">
+                    <ChevronRight className="h-4 w-4" />
+                  </Button>
+                </>
+              )}
+              {/* Close button */}
+              <Button variant="ghost" size="icon" onClick={onToggle} className="h-8 w-8 ml-2">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+              </Button>
+            </div>
           </div>
           <div className="flex-1 overflow-hidden">
             <iframe
               key={activeStream.id}
               src={
                 activeStream.platform === "twitch"
-                ? `https://player.twitch.tv/?channel=${activeStream.channel}&parent=${window.location.hostname}`
-                : activeStream.platform === "youtube"
-                ? `https://www.youtube.com/embed/live_stream?channel=${activeStream.channel}`
-                : undefined
+                  ? `https://www.twitch.tv/embed/${activeStream.channel}/chat?parent=${window.location.hostname}&darkpopout`
+                  : activeStream.platform === "kick"
+                  ? `https://kick.com/popout/${activeStream.channel}/chat`
+                  : undefined
               }
-              className="w-full h-full"
-              allowFullScreen
+              className="w-full h-full border-none"
             />
           </div>
         </>
       )}
-      <div className="p-4 flex flex-col gap-2">
-        <Button onClick={onToggle} className="w-full">
-          {isOpen ? "Close Chat" : "Open Chat"}
-        </Button>
-        <Button
-          onClick={() => {
-            if (activeStream) {
-              removeStream(activeStream.id);
-            }
-          }}
-          variant="destructive"
-          className="w-full"
-        >
-          Remove This Stream
-        </Button>
-      </div>
     </div>
   );
 }
