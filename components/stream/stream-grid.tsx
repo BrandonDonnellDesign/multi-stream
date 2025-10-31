@@ -51,11 +51,17 @@ export function StreamGrid({ streams, onReorder, onToggleChat }: StreamGridProps
             {...provided.droppableProps}
             ref={provided.innerRef}
             style={{
-              gridTemplateColumns: visibleStreams.length > 1 ? `repeat(${gridCols}, 1fr)` : undefined,
-              gridTemplateRows: visibleStreams.length === 2 || visibleStreams.length === 3 ? "repeat(1, 1fr)" : "auto",
-            }}            className={cn(           
+              gridTemplateColumns:
+                visibleStreams.length > 1
+                  ? `repeat(auto-fit, minmax(400px, 1fr))`
+                  : undefined,
+              gridTemplateRows:
+                visibleStreams.length === 2 || visibleStreams.length === 3
+                  ? "repeat(1, 1fr)"
+                  : "auto",
+            }}
+            className={cn(
               "w-full h-full rounded-xl",
-              visibleStreams.length === 4 ? "grid" : "",
               visibleStreams.length === 1
                 ? "flex items-center justify-center"
                 : "grid"
@@ -74,7 +80,7 @@ export function StreamGrid({ streams, onReorder, onToggleChat }: StreamGridProps
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
                     className={cn(
-                      "relative",
+                      "relative border-none outline-none",
 
                       visibleStreams.length === 1 
                         ? "w-full h-full max-w-[100vw] max-h-[100vh] aspect-video mx-auto" // Responsive single stream size

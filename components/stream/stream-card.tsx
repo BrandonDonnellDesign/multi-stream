@@ -27,54 +27,54 @@ export function StreamCard({
   const isLive = useStreamStatus(stream);
 
   return (
-    <div className="flex items-center justify-between px-2 py-1 rounded-xl shadow-md hover:shadow-lg transition-all" style={{ backgroundColor: '#1e1e1e' }}>
+    <div className="flex items-center justify-between px-3 py-2 rounded-xl shadow-md hover:shadow-lg transition-all" style={{ backgroundColor: '#1e1e1e' }}>
       <div>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2">
           {stream.platform === "kick" ? (
-            <KickIcon className="h-6 w-6" />
+            <KickIcon className="h-4 w-4" />
           ) : stream.platform === "twitch" ? (
-            <TwitchIcon className="h-6 w-6" />
+            <TwitchIcon className="h-4 w-4" />
           ) : null}
-          <p className="font-medium capitalize text-lg">{stream.channel}</p>
+          <p className="font-medium capitalize text-[0.95rem]">{stream.channel}</p>
           <LiveIndicator isLive={isLive} />
         </div>
       </div>
-      <div className="flex gap-1">
+      <div className="flex gap-0.5 items-center">
         <Button
           variant="ghost"
-          size="lg"
+          size="icon"
           onClick={() => onToggleVisibility(stream.id)}
-          className="p-2"
+          className="h-7 w-7 rounded-md flex items-center justify-center p-1"
         >
           {stream.visible ? (
-            <Eye className="h-6 w-6" />
+            <Eye className="h-5 w-5" />
           ) : (
-            <EyeOff className="h-6 w-6" />
+            <EyeOff className="h-5 w-5" />
           )}
         </Button>
         <Button
           variant={stream.chatEnabled ? "default" : "ghost"}
-          size="lg"
+          size="icon"
           onClick={() => onToggleChat(stream.id)}
-          className="p-2"
+          className="h-7 w-7 rounded-md flex items-center justify-center p-1"
         >
-          <MessageSquare className="h-5 w-5" />
+          <MessageSquare className="h-4 w-4" />
         </Button>
         <Button
           variant="ghost"
-          size="lg"
+          size="icon"
           onClick={() => onRefresh(stream.id)}
-          className="p-2"
+          className="h-7 w-7 rounded-md flex items-center justify-center p-1"
         >
-          <RefreshCw className="h-6 w-6" />
+          <RefreshCw className="h-5 w-5" />
         </Button>
         <Button
           variant="ghost"
-          size="lg"
+          size="icon"
           onClick={() => onRemove(stream.id)}
-          className="p-2 text-destructive hover:text-destructive"
+          className="h-7 w-7 rounded-md flex items-center justify-center p-1 text-destructive hover:text-destructive"
         >
-          <X className="h-4 w-4" />
+          <X className="h-3 w-3" />
         </Button>
       </div>
     </div>

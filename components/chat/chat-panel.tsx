@@ -44,9 +44,14 @@ export function ChatPanel({ streams: allStreams, isOpen, onToggle }: ChatPanelPr
   return (
     <div
       className={cn(
-        "h-full transition-all duration-300 flex flex-col shadow-lg rounded-md",
-        isOpen ? "w-[10%] bg-background" : "w-0"
+        "h-full transition-all duration-300 flex flex-col rounded-xl",
+        isOpen
+          ? "w-[350px] min-w-[250px] max-w-[400px] backdrop-blur-lg bg-card border border-accent shadow-2xl"
+          : "w-0"
       )}
+      style={{
+        transition: 'width 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+      }}
     >
       {isOpen && (
         <>

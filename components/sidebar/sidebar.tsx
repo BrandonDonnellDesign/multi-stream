@@ -81,26 +81,28 @@ export function Sidebar({
 
 
   return (
-    <div
-        className={cn(
-            "h-full bg-secondary transition-all duration-300 flex flex-col",
-            "border-r border-muted shadow-lg rounded-r-lg", // Added shadow and rounded border
-            isOpen ? "w-auto" : "w-16",
-        )}
-    >
-        <div className="flex items-center justify-between px-3 py-2 border-b border-muted">
-            <h2 className={cn("font-bold text-lg", !isOpen && "hidden")}>
+  <div
+    className={cn(
+      "h-full flex flex-col transition-all duration-300 overflow-hidden",
+            "border-r border-muted shadow-2xl rounded-r-2xl",
+            "bg-card",
+            "p-0",
+      isOpen ? "min-w-[400px] w-[440px]" : "w-16"
+    )}
+  >
+  <div className="flex items-center justify-between px-8 py-6 min-h-[80px] rounded-xl bg-[rgba(40,40,50,0.85)] shadow-lg mb-4">
+            <h2 className={cn("font-extrabold text-3xl tracking-tight min-w-0 truncate text-white drop-shadow-md", !isOpen && "hidden")}> 
           Stream Manager
         </h2>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-4 min-w-0">
           {isOpen && <ShareButton streams={streams} />}
           <Button
             variant="ghost"
-            size="sm"
-            className={cn("h-8 w-8 p-0", isOpen ? "rotate-180" : "rotate-0")}          
+            size="lg"
+            className={cn("h-12 w-12 p-0 flex items-center justify-center transition-transform duration-150 hover:scale-110 hover:bg-accent/30", isOpen ? "rotate-180" : "rotate-0")}
             onClick={onClose}
           >
-            <ChevronLeft className="h-4 w-4" />
+            <ChevronLeft className="h-6 w-6" />
           </Button>
         </div>
       </div>
@@ -108,12 +110,13 @@ export function Sidebar({
         {isOpen && (
             <div className="flex-1 overflow-auto px-3 py-2">
                 <StreamForm onAdd={onAddStream} />
-                <div className="mb-2">
-                    <ChatControls
-                        streams={streams}
-                        onToggleAllChats={onToggleAllChats}
-                    />
-                </div>
+        <div className="mb-1">
+          <ChatControls
+            streams={streams}
+            onToggleAllChats={onToggleAllChats}
+            compact
+          />
+        </div>
                 <StreamList
                     streams={streams}
                     onToggleVisibility={onToggleVisibility}

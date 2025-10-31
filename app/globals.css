@@ -108,25 +108,25 @@
 
 @layer base {
     :root {
-        --background: 222.2 84% 4.9%;
-        --foreground: 210 40% 98%;
-        --card: 222.2 84% 4.9%;
-        --card-foreground: 210 40% 98%;
-        --popover: 222.2 84% 4.9%;
-        --popover-foreground: 210 40% 98%;
-        --primary: 210 40% 98%;
-        --primary-foreground: 222.2 84% 4.9%;
-        --secondary: 217.2 32.6% 17.5%;
-        --secondary-foreground: 210 40% 98%;
-        --muted: 217.2 32.6% 17.5%;
-        --muted-foreground: 215 20.2% 65.1%;
-        --accent: 217.2 32.6% 17.5%;
-        --accent-foreground: 210 40% 98%;
-        --destructive: 0 62.8% 30.6%;
-        --destructive-foreground: 210 40% 98%;
-        --border: 217.2 32.6% 17.5%;
-        --input: 217.2 32.6% 17.5%;
-        --ring: 210 40% 98%;
+  --background: 240 20% 6%; /* Twitch/Kick: deep black */
+  --foreground: 0 0% 100%; /* pure white */
+  --card: 240 12% 14%; /* dark slate for sidebar/cards */
+  --card-foreground: 0 0% 100%;
+  --popover: 240 12% 18%;
+  --popover-foreground: 0 0% 100%;
+  --primary: 245 100% 60%; /* Twitch purple */
+  --primary-foreground: 0 0% 100%;
+  --secondary: 120 100% 45%; /* Kick green */
+  --secondary-foreground: 0 0% 100%;
+  --muted: 240 10% 40%; /* light gray for body text */
+  --muted-foreground: 0 0% 80%;
+  --accent: 200 100% 55%; /* electric blue accent */
+  --accent-foreground: 0 0% 100%;
+  --destructive: 0 90% 55%; /* punchy red */
+  --destructive-foreground: 0 0% 100%;
+  --border: 240 12% 18%;
+  --input: 240 12% 18%;
+  --ring: 245 100% 60%; /* Twitch purple for focus */
     }
 }
 @layer base {
