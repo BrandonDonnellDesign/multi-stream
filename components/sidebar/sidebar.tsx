@@ -87,10 +87,10 @@ export function Sidebar({
             "border-r border-muted shadow-2xl rounded-r-2xl",
             "bg-card",
             "p-0",
-      isOpen ? "min-w-[400px] w-[440px]" : "w-16"
+  isOpen ? "min-w-[360px] w-[380px]" : "w-16"
     )}
   >
-  <div className="flex items-center justify-between px-8 py-6 min-h-[80px] rounded-xl bg-[rgba(40,40,50,0.85)] shadow-lg mb-4">
+  <div className="flex items-center justify-between px-3 py-2 min-h-[56px] rounded-xl bg-[rgba(40,40,50,0.85)] shadow-lg mb-3">
             <h2 className={cn("font-extrabold text-3xl tracking-tight min-w-0 truncate text-white drop-shadow-md", !isOpen && "hidden")}> 
           Stream Manager
         </h2>
