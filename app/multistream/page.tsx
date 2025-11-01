@@ -9,7 +9,7 @@ import { useState } from "react";
 
 export default function MultiStreamPage() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const [isChatOpen, setIsChatOpen] = useState(false);
+  const [activeChatStreamId, setActiveChatStreamId] = useState<string|null>(null);
   const {
     streams,
     addStream,
@@ -33,12 +33,9 @@ export default function MultiStreamPage() {
         onToggleVisibility={toggleStreamVisibility}
         onToggleChat={(id) => {
           toggleStreamChat(id);
-          setIsChatOpen((prev) => !prev);
+          setActiveChatStreamId((prev) => prev === id ? null : id);
         }}
-        onToggleAllChats={(enabled) => {
-          toggleAllChats(enabled);
-          setIsChatOpen(enabled);
-        }}
+        onToggleAllChats={() => setActiveChatStreamId(null)}
         onRefresh={refreshStream}
         onRemove={removeStream}
         onReorder={reorderStreams}
@@ -61,9 +58,9 @@ export default function MultiStreamPage() {
             <StreamGrid streams={visibleStreams} onReorder={reorderStreams} />
           </div>
           <ChatPanel 
-            streams={streams}
-            isOpen={isChatOpen}
-            onToggle={() => setIsChatOpen(!isChatOpen)}
+            streams={activeChatStreamId ? streams.filter(s => s.id === activeChatStreamId) : []}
+            isOpen={!!activeChatStreamId}
+            onToggle={() => setActiveChatStreamId(null)}
           />
         </div>
       </main>
