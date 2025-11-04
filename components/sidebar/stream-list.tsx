@@ -11,6 +11,8 @@ interface StreamListProps {
   onRefresh: (id: string) => void;
   onRemove: (id: string) => void;
   onReorder: (streams: Stream[]) => void;
+  isChatOpen?: boolean;
+  activeStreamId?: string;
 }
 
 export function StreamList({
@@ -20,6 +22,8 @@ export function StreamList({
   onRefresh,
   onRemove,
   onReorder,
+  isChatOpen,
+  activeStreamId,
 }: StreamListProps) {
   const handleDragEnd = (result: any) => {
     if (!result.destination) return;
@@ -58,6 +62,8 @@ export function StreamList({
                       onToggleChat={onToggleChat}
                       onRefresh={onRefresh}
                       onRemove={onRemove}
+                      isChatOpen={isChatOpen}
+                      activeStreamId={activeStreamId}
                     />
                   </div>
                 )}

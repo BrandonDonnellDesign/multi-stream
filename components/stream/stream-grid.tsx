@@ -27,7 +27,7 @@ export function StreamGrid({ streams, onReorder, onToggleChat, maxColumns = 3 }:
   }
 
   // Use maxColumns from props
-  const gridCols = maxColumns;
+  const gridCols = visibleStreams.length < maxColumns ? visibleStreams.length : maxColumns;
 
   const handleDragEnd = (result: any) => {
     if (!result.destination) return;

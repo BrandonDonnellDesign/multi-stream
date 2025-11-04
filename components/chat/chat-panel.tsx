@@ -9,28 +9,28 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 interface ChatPanelProps {
   streams: Stream[];
   isOpen: boolean;
+  activeStreamIndex: number;
+  setActiveStreamIndex: (idx: number) => void;
   onToggle: () => void;
 }
 
-export function ChatPanel({ streams: allStreams, isOpen, onToggle }: ChatPanelProps) {
+export function ChatPanel({ streams: allStreams, isOpen, activeStreamIndex, setActiveStreamIndex, onToggle }: ChatPanelProps) {
   const streams = allStreams;
-
-  const [activeStreamIndex, setActiveStreamIndex] = useState(0);
   const activeStream = streams[activeStreamIndex];
 
   const handlePrevious = () => {
-    setActiveStreamIndex((prev) => (prev - 1 + streams.length) % streams.length);
+    setActiveStreamIndex((activeStreamIndex - 1 + streams.length) % streams.length);
   };
 
   const handleNext = () => {
-    setActiveStreamIndex((prev) => (prev + 1) % streams.length);
+    setActiveStreamIndex((activeStreamIndex + 1) % streams.length);
   };
   // Reset index if out of bounds
   useEffect(() => {
     if (activeStreamIndex >= streams.length && streams.length > 0) {
       setActiveStreamIndex(0);
     }
-  }, [activeStreamIndex, streams]);
+  }, [activeStreamIndex, streams, setActiveStreamIndex]);
 
   // Remove a stream
   const removeStream = (streamId: string) => {

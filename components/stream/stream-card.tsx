@@ -11,6 +11,8 @@ interface StreamCardProps {
   onToggleChat: (id: string) => void;
   onRefresh: (id: string) => void;
   onRemove: (id: string) => void;
+  isChatOpen?: boolean;
+  activeStreamId?: string;
 }
 
 interface IconProps {
@@ -23,6 +25,8 @@ export function StreamCard({
   onToggleChat,
   onRefresh,
   onRemove,
+  isChatOpen,
+  activeStreamId,
 }: StreamCardProps) {
   const isLive = useStreamStatus(stream);
 

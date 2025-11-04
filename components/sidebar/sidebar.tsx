@@ -24,6 +24,8 @@ interface SidebarProps {
   onReorder: (streams: Stream[]) => void;
   maxColumns: number;
   setMaxColumns: (n: number) => void;
+  isChatOpen?: boolean;
+  activeStreamId?: string;
 }
 
 export function Sidebar({
@@ -39,6 +41,8 @@ export function Sidebar({
   onReorder,
   maxColumns,
   setMaxColumns,
+  isChatOpen,
+  activeStreamId,
 }: SidebarProps) {
     const [theme, setTheme] = useState<"light" | "dark">("dark");
 
@@ -112,16 +116,19 @@ export function Sidebar({
             streams={streams}
             onToggleAllChats={onToggleAllChats}
             compact
+            isChatOpen={isChatOpen}
           />
         </div>
-                <StreamList
-                    streams={streams}
-                    onToggleVisibility={onToggleVisibility}
-                    onToggleChat={onToggleChat}
-                    onRefresh={onRefresh}
-                    onRemove={onRemove}
-                    onReorder={onReorder}
-                />
+        <StreamList
+          streams={streams}
+          onToggleVisibility={onToggleVisibility}
+          onToggleChat={onToggleChat}
+          onRefresh={onRefresh}
+          onRemove={onRemove}
+          onReorder={onReorder}
+          isChatOpen={isChatOpen}
+          activeStreamId={activeStreamId}
+        />
               
         <div className="mt-auto border-t border-muted p-4">
         <Dialog>
