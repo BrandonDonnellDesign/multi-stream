@@ -22,6 +22,8 @@ interface SidebarProps {
   onRefresh: (id: string) => void;
   onRemove: (id: string) => void;
   onReorder: (streams: Stream[]) => void;
+  maxColumns: number;
+  setMaxColumns: (n: number) => void;
 }
 
 export function Sidebar({
@@ -35,9 +37,10 @@ export function Sidebar({
   onRefresh,
   onRemove,
   onReorder,
+  maxColumns,
+  setMaxColumns,
 }: SidebarProps) {
     const [theme, setTheme] = useState<"light" | "dark">("dark");
-    const [maxColumns, setMaxColumns] = useState<number>(4);
 
     useEffect(() => {
       const storedTheme = localStorage.getItem("theme");
@@ -45,10 +48,6 @@ export function Sidebar({
         setTheme(storedTheme as "light" | "dark");
       }
 
-      const storedMaxColumns = localStorage.getItem("maxColumns");
-      if (storedMaxColumns) {
-        setMaxColumns(parseInt(storedMaxColumns));
-      }
 
       // Restore streams from localStorage if available
       const storedStreams = localStorage.getItem("sidebar-streams");
@@ -68,9 +67,6 @@ export function Sidebar({
       localStorage.setItem("theme", theme);
     }, [theme]);
 
-    useEffect(() => {
-      localStorage.setItem("maxColumns", maxColumns.toString());
-    }, [maxColumns]);
 
     // Persist streams whenever they change
     useEffect(() => {
@@ -110,6 +106,7 @@ export function Sidebar({
         {isOpen && (
             <div className="flex-1 overflow-auto px-3 py-2">
                 <StreamForm onAdd={onAddStream} />
+                {/* Column selection moved to settings dialog below */}
         <div className="mb-1">
           <ChatControls
             streams={streams}
@@ -126,46 +123,53 @@ export function Sidebar({
                     onReorder={onReorder}
                 />
               
-{/*               <div className="mt-auto border-t border-muted p-4">
-                <Dialog>
-                    <DialogTrigger asChild>
-                    <Button variant="ghost" className="w-full justify-start">Settings</Button>
-                    </DialogTrigger>
-                    <DialogContent className="sm:max-w-[425px]">
-                        <DialogHeader>
-                            <DialogTitle>Application settings</DialogTitle>
-                            <DialogDescription>
-                                Configure the application settings to your liking.
-                            </DialogDescription>
-                        </DialogHeader>
-                        <div className="grid gap-4 py-4">
-                            <div className="grid grid-cols-4 items-center gap-4">
-                                <label
-                                    htmlFor="theme"
-                                    className="text-right text-sm font-medium"
-                                >
-                                    Theme
-                                </label>                                 
-                                <Select onValueChange={setTheme} defaultValue={theme}>
-                                    <SelectTrigger className="col-span-3">
-                                        <SelectValue placeholder="Select a theme" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="light">Light</SelectItem>
-                                        <SelectItem value="dark">Dark</SelectItem>
-                                    </SelectContent>
-                                </Select>
-                            </div>
-                            <div className="grid grid-cols-4 items-center gap-4">
-                                <label htmlFor="maxColumns" className="text-right text-sm font-medium">Max Columns</label>
-                                <Input id="maxColumns" type="number" value={maxColumns} onChange={(e) => setMaxColumns(parseInt(e.target.value))} className="col-span-3" />
-                            </div>
-                        </div>
-                        
-                        
-                    </DialogContent>
-                </Dialog>
-              </div> */}
+        <div className="mt-auto border-t border-muted p-4">
+        <Dialog>
+          <DialogTrigger asChild>
+          <Button variant="ghost" className="w-full justify-start">Settings</Button>
+          </DialogTrigger>
+          <DialogContent className="sm:max-w-[425px]">
+            <DialogHeader>
+              <DialogTitle>Application settings</DialogTitle>
+              <DialogDescription>
+                Configure the application settings to your liking.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="grid gap-4 py-4">
+              <div className="grid grid-cols-4 items-center gap-4">
+                <label
+                  htmlFor="theme"
+                  className="text-right text-sm font-medium"
+                >
+                  Theme
+                </label>                                 
+                                <Select onValueChange={v => setTheme(v as "light" | "dark")} defaultValue={theme}>
+                  <SelectTrigger className="col-span-3">
+                    <SelectValue placeholder="Select a theme" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="light">Light</SelectItem>
+                    <SelectItem value="dark">Dark</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <label htmlFor="maxColumns" className="text-right text-sm font-medium">Columns</label>
+                <select
+                  id="maxColumns"
+                  value={maxColumns}
+                  onChange={e => setMaxColumns(Number(e.target.value))}
+                  className="col-span-3 bg-card border border-muted rounded px-2 py-1 text-sm"
+                >
+                  {[1,2,3,4,5,6].map(n => (
+                  <option key={n} value={n}>{n}</option>
+                  ))}
+                </select>
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
+        </div>
             </div>
         )}
     </div>   

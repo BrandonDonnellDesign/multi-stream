@@ -9,6 +9,7 @@ import { useState } from "react";
 
 export default function DashboardPage() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [maxColumns, setMaxColumns] = useState(3);
   const [isChatOpen, setIsChatOpen] = useState(false);
   const {
     streams,
@@ -42,6 +43,8 @@ export default function DashboardPage() {
         onRefresh={refreshStream}
         onRemove={removeStream}
         onReorder={reorderStreams}
+        maxColumns={maxColumns}
+        setMaxColumns={setMaxColumns}
       />
 
       <main className="flex-1 min-h-0 relative">
@@ -58,7 +61,7 @@ export default function DashboardPage() {
 
         <div className="flex h-full">
           <div className="flex-1 min-h-0">
-            <StreamGrid streams={visibleStreams} onReorder={reorderStreams} />
+            <StreamGrid streams={visibleStreams} onReorder={reorderStreams} maxColumns={maxColumns} />
           </div>
           <ChatPanel 
             streams={streams}

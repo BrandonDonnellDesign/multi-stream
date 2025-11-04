@@ -8,6 +8,7 @@ import { useStreams } from "@/hooks/use-streams";
 import { useState } from "react";
 
 export default function MultiStreamPage() {
+  const [maxColumns, setMaxColumns] = useState<number>(3);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [activeChatStreamId, setActiveChatStreamId] = useState<string|null>(null);
   const {
@@ -39,6 +40,8 @@ export default function MultiStreamPage() {
         onRefresh={refreshStream}
         onRemove={removeStream}
         onReorder={reorderStreams}
+        maxColumns={maxColumns}
+        setMaxColumns={setMaxColumns}
       />
 
       <main className="flex-1 min-h-0 relative">
@@ -55,7 +58,7 @@ export default function MultiStreamPage() {
 
         <div className="flex h-full">
           <div className="flex-1 min-h-0">
-            <StreamGrid streams={visibleStreams} onReorder={reorderStreams} />
+            <StreamGrid streams={visibleStreams} onReorder={reorderStreams} maxColumns={maxColumns} />
           </div>
           <ChatPanel 
             streams={activeChatStreamId ? streams.filter(s => s.id === activeChatStreamId) : []}

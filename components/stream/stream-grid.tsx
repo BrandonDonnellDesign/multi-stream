@@ -11,9 +11,10 @@ interface StreamGridProps {
   streams: Stream[];
   onReorder: (streams: Stream[]) => void;
   onToggleChat?: (id: string) => void;
+  maxColumns?: number;
 }
 
-export function StreamGrid({ streams, onReorder, onToggleChat }: StreamGridProps) {
+export function StreamGrid({ streams, onReorder, onToggleChat, maxColumns = 3 }: StreamGridProps) {
   const visibleStreams = useVisibleStreams(streams);
   const handleToggleChat = onToggleChat ?? (() => {});
 
@@ -25,13 +26,8 @@ export function StreamGrid({ streams, onReorder, onToggleChat }: StreamGridProps
     );
   }
 
-  // Calculate grid columns based on number of streams
-  const getGridCols = (count: number) => {
-    if (count <= 1) return 1;
-    return Math.min(count, 3);
-  };
-
-  const gridCols = getGridCols(visibleStreams.length);
+  // Use maxColumns from props
+  const gridCols = maxColumns;
 
   const handleDragEnd = (result: any) => {
     if (!result.destination) return;
@@ -51,14 +47,11 @@ export function StreamGrid({ streams, onReorder, onToggleChat }: StreamGridProps
             {...provided.droppableProps}
             ref={provided.innerRef}
             style={{
+              display: visibleStreams.length === 1 ? undefined : "grid",
               gridTemplateColumns:
                 visibleStreams.length > 1
-                  ? `repeat(auto-fit, minmax(400px, 1fr))`
+                  ? `repeat(${gridCols}, minmax(400px, 1fr))`
                   : undefined,
-              gridTemplateRows:
-                visibleStreams.length === 2 || visibleStreams.length === 3
-                  ? "repeat(1, 1fr)"
-                  : "auto",
             }}
             className={cn(
               "w-full h-full rounded-xl",
@@ -66,7 +59,6 @@ export function StreamGrid({ streams, onReorder, onToggleChat }: StreamGridProps
                 ? "flex items-center justify-center"
                 : "grid"
             )}
-
           >
             {visibleStreams.map((stream, index) => (
               <Draggable
