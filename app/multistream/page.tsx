@@ -34,11 +34,21 @@ export default function MultiStreamPage() {
         onAddStream={addStream}
         onToggleVisibility={toggleStreamVisibility}
         onToggleChat={(id) => {
-          toggleStreamChat(id);
+          toggleStreamChat(id); // Only toggle chat for this stream
           const idx = streams.findIndex(s => s.id === id);
-          if (idx !== -1) {
+          if (idx !== -1 && streams[idx].chatEnabled === false) {
+            // If chat is being enabled, set as active in chat panel
             setActiveStreamIndex(idx);
             setActiveChatStreamId(id);
+          } else if (idx !== -1 && streams[idx].chatEnabled === true && activeChatStreamId === id) {
+            // If chat is being disabled and it's the active chat, find another enabled chat
+            const enabledIdx = streams.findIndex((s, i) => s.chatEnabled && s.id !== id);
+            if (enabledIdx !== -1) {
+              setActiveStreamIndex(enabledIdx);
+              setActiveChatStreamId(streams[enabledIdx].id);
+            } else {
+              setActiveChatStreamId(null);
+            }
           }
         }}
         onToggleAllChats={() => setActiveChatStreamId(null)}
@@ -49,6 +59,7 @@ export default function MultiStreamPage() {
         setMaxColumns={setMaxColumns}
         isChatOpen={!!activeChatStreamId}
         activeStreamId={activeChatStreamId ?? undefined}
+        setActiveStreamIndex={setActiveStreamIndex}
       />
 
       <main className="flex-1 min-h-0 relative">
@@ -73,18 +84,24 @@ export default function MultiStreamPage() {
             activeStreamIndex={activeStreamIndex}
             setActiveStreamIndex={(idx) => {
               setActiveStreamIndex(idx);
-              setActiveChatStreamId(streams[idx]?.id ?? null);
+              // Find enabled chats
+              const enabledChats = streams.filter(s => s.chatEnabled);
+              setActiveChatStreamId(enabledChats[idx]?.id ?? null);
             }}
             onToggle={() => {
               // Disable chat for the active stream only
-              if (streams[activeStreamIndex]) {
-                toggleStreamChat(streams[activeStreamIndex].id);
-                // Find next enabled chat, or close panel if none
-                const nextEnabledIdx = streams.findIndex((s, i) => s.chatEnabled && i !== activeStreamIndex);
-                if (nextEnabledIdx !== -1) {
-                  setActiveStreamIndex(nextEnabledIdx);
-                  setActiveChatStreamId(streams[nextEnabledIdx].id);
+              const enabledChats = streams.filter(s => s.chatEnabled);
+              const closingId = enabledChats[activeStreamIndex]?.id;
+              if (closingId) {
+                toggleStreamChat(closingId);
+                // After closing, get new enabled chats
+                const newEnabledChats = streams.filter(s => s.chatEnabled && s.id !== closingId);
+                if (newEnabledChats.length > 0) {
+                  // If there are still enabled chats, set to first one
+                  setActiveStreamIndex(0);
+                  setActiveChatStreamId(newEnabledChats[0].id);
                 } else {
+                  // No enabled chats left, close panel
                   setActiveChatStreamId(null);
                 }
               }

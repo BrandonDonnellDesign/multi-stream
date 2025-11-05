@@ -13,6 +13,7 @@ interface StreamListProps {
   onReorder: (streams: Stream[]) => void;
   isChatOpen?: boolean;
   activeStreamId?: string;
+  onSelectStream?: (index: number) => void;
 }
 
 export function StreamList({
@@ -24,6 +25,7 @@ export function StreamList({
   onReorder,
   isChatOpen,
   activeStreamId,
+  onSelectStream,
 }: StreamListProps) {
   const handleDragEnd = (result: any) => {
     if (!result.destination) return;
@@ -56,15 +58,16 @@ export function StreamList({
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
                   >
-                    <StreamCard
-                      stream={stream}
-                      onToggleVisibility={onToggleVisibility}
-                      onToggleChat={onToggleChat}
-                      onRefresh={onRefresh}
-                      onRemove={onRemove}
-                      isChatOpen={isChatOpen}
-                      activeStreamId={activeStreamId}
-                    />
+                      <StreamCard
+                        stream={stream}
+                        onToggleVisibility={onToggleVisibility}
+                        onToggleChat={onToggleChat}
+                        onRefresh={onRefresh}
+                        onRemove={onRemove}
+                        isChatOpen={isChatOpen}
+                        activeStreamId={activeStreamId}
+                        onSelect={() => onSelectStream && onSelectStream(index)}
+                      />
                   </div>
                 )}
               </Draggable>

@@ -15,29 +15,30 @@ interface ChatPanelProps {
 }
 
 export function ChatPanel({ streams: allStreams, isOpen, activeStreamIndex, setActiveStreamIndex, onToggle }: ChatPanelProps) {
-  const streams = allStreams;
-  const activeStream = streams[activeStreamIndex];
+  // Only show streams with chatEnabled
+  const enabledStreams = allStreams.filter(s => s.chatEnabled);
+  const activeStream = enabledStreams[activeStreamIndex];
 
   const handlePrevious = () => {
-    setActiveStreamIndex((activeStreamIndex - 1 + streams.length) % streams.length);
+    setActiveStreamIndex((activeStreamIndex - 1 + enabledStreams.length) % enabledStreams.length);
   };
 
   const handleNext = () => {
-    setActiveStreamIndex((activeStreamIndex + 1) % streams.length);
+    setActiveStreamIndex((activeStreamIndex + 1) % enabledStreams.length);
   };
   // Reset index if out of bounds
   useEffect(() => {
-    if (activeStreamIndex >= streams.length && streams.length > 0) {
+    if (activeStreamIndex >= enabledStreams.length && enabledStreams.length > 0) {
       setActiveStreamIndex(0);
     }
-  }, [activeStreamIndex, streams, setActiveStreamIndex]);
+  }, [activeStreamIndex, enabledStreams, setActiveStreamIndex]);
 
   // Remove a stream
   const removeStream = (streamId: string) => {
     // Logic to remove the stream from the props or state if needed
   };
 
-  if (streams.length === 0) {
+  if (!activeStream) {
     return null;
   }
 
@@ -53,7 +54,7 @@ export function ChatPanel({ streams: allStreams, isOpen, activeStreamIndex, setA
         transition: 'width 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
       }}
     >
-      {isOpen && (
+  {isOpen && activeStream && (
         <>
           <div className="flex items-center justify-between p-4 border-b border-muted">
             <div className="flex items-center gap-2">
@@ -61,7 +62,7 @@ export function ChatPanel({ streams: allStreams, isOpen, activeStreamIndex, setA
               <span className="font-semibold">{activeStream.channel} Chat</span>
             </div>
             <div className="flex items-center gap-1">
-              {streams.length > 1 && (
+              {enabledStreams.length > 1 && (
                 <>
                   <Button variant="ghost" size="icon" onClick={handlePrevious} className="h-8 w-8">
                     <ChevronLeft className="h-4 w-4" />

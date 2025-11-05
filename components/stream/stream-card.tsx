@@ -13,6 +13,7 @@ interface StreamCardProps {
   onRemove: (id: string) => void;
   isChatOpen?: boolean;
   activeStreamId?: string;
+  onSelect?: () => void;
 }
 
 interface IconProps {
@@ -27,6 +28,7 @@ export function StreamCard({
   onRemove,
   isChatOpen,
   activeStreamId,
+  onSelect,
 }: StreamCardProps) {
   const isLive = useStreamStatus(stream);
 
@@ -59,7 +61,10 @@ export function StreamCard({
         <Button
           variant={stream.chatEnabled ? "default" : "ghost"}
           size="icon"
-          onClick={() => onToggleChat(stream.id)}
+          onClick={() => {
+            onToggleChat(stream.id);
+            if (onSelect) onSelect();
+          }}
           className="h-7 w-7 rounded-md flex items-center justify-center p-1"
         >
           <MessageSquare className="h-4 w-4" />

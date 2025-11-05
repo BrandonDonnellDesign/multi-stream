@@ -26,6 +26,7 @@ interface SidebarProps {
   setMaxColumns: (n: number) => void;
   isChatOpen?: boolean;
   activeStreamId?: string;
+  setActiveStreamIndex?: (index: number) => void;
 }
 
 export function Sidebar({
@@ -43,6 +44,7 @@ export function Sidebar({
   setMaxColumns,
   isChatOpen,
   activeStreamId,
+  setActiveStreamIndex,
 }: SidebarProps) {
     const [theme, setTheme] = useState<"light" | "dark">("dark");
 
@@ -128,6 +130,7 @@ export function Sidebar({
           onReorder={onReorder}
           isChatOpen={isChatOpen}
           activeStreamId={activeStreamId}
+          onSelectStream={setActiveStreamIndex}
         />
               
         <div className="mt-auto border-t border-muted p-4">
