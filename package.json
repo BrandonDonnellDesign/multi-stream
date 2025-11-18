@@ -55,7 +55,7 @@
     "embla-carousel-react": "^8.3.0",
     "eslint": "^9.32.0",
     "eslint-config-next": "^15.3.1",
-    "glob": "^11.0.2",
+    "glob": "^11.1.0",
     "inflight": "^1.0.6",
     "input-otp": "^1.2.4",
     "lucide-react": "^0.446.0",
