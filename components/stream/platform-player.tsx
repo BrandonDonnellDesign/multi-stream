@@ -13,8 +13,8 @@ export function PlatformPlayer({ stream, className }: PlatformPlayerProps) {
       return `https://player.twitch.tv/?channel=${stream.channel}&parent=${window.location.hostname}`;
     }
     if (stream.platform === "youtube") {
-        return `https://www.youtube.com/embed/${stream.channel}?autoplay=1`
-      }
+      return `https://www.youtube.com/embed/${stream.channel}?autoplay=1`
+    }
     return `https://player.kick.com/${stream.channel}`;
   };
   return (
@@ -23,7 +23,7 @@ export function PlatformPlayer({ stream, className }: PlatformPlayerProps) {
         "relative w-full h-full shadow-lg ",
         className
       )}
-    >   
+    >
       <div className={cn("overflow-hidden w-full h-full ")}>
         <iframe
           src={getStreamUrl()}
@@ -33,6 +33,7 @@ export function PlatformPlayer({ stream, className }: PlatformPlayerProps) {
           className={cn(
             "absolute inset-0 w-full h-full "
           )}
+          loading="lazy"
         />
       </div>
     </div>
