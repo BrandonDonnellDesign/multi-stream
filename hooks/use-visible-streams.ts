@@ -22,12 +22,19 @@ export function useVisibleStreams(streams: Stream[]) {
         })
       );
       // Only filter, do not reconstruct streams
-      setVisibleStreams(
-        streams.map((stream, idx) => ({
-          ...stream,
-          isLive: checkedStreams[idx].isLive
-        })).filter((stream) => stream.isLive && stream.visible)
-      );
+      const newVisible = streams.map((stream, idx) => ({
+        ...stream,
+        isLive: checkedStreams[idx].isLive
+      })).filter((stream) => stream.isLive && stream.visible);
+
+      setVisibleStreams(prev => {
+        // Simple length check first
+        if (prev.length !== newVisible.length) return newVisible;
+
+        // Check if IDs are the same
+        const isSame = prev.every((s, i) => s.id === newVisible[i].id && s.isLive === newVisible[i].isLive);
+        return isSame ? prev : newVisible;
+      });
     };
 
     checkStreamStatuses();

@@ -13,6 +13,7 @@ export function StreamPlayer({ stream }: StreamPlayerProps) {
     <div className="relative w-full h-full shadow-md">
       <iframe
         src={streamUrl}
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
         frameBorder="0"
         allowFullScreen
         scrolling="no"

@@ -29,6 +29,7 @@ export function PlatformPlayer({ stream, className }: PlatformPlayerProps) {
           src={getStreamUrl()}
           allowFullScreen
           title="Stream Player"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
           frameBorder="0"
           className={cn(
             "absolute inset-0 w-full h-full "

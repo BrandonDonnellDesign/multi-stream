@@ -16,7 +16,7 @@ interface StreamGridProps {
 
 export function StreamGrid({ streams, onReorder, onToggleChat, maxColumns = 3 }: StreamGridProps) {
   const visibleStreams = useVisibleStreams(streams);
-  const handleToggleChat = onToggleChat ?? (() => {});
+  const handleToggleChat = onToggleChat ?? (() => { });
 
   if (visibleStreams.length === 0) {
     return (
@@ -72,13 +72,10 @@ export function StreamGrid({ streams, onReorder, onToggleChat, maxColumns = 3 }:
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
                     className={cn(
-                      "relative border-none outline-none",
-
-                      visibleStreams.length === 1 
-                        ? "w-full h-full max-w-[100vw] max-h-[100vh] aspect-video mx-auto" // Responsive single stream size
-                        : visibleStreams.length === 3 ? "max-w-[1300px]"
-                        : ""
+                      "relative border-none outline-none ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+                      visibleStreams.length === 1 && "max-w-[100vw] max-h-[100vh] aspect-video mx-auto"
                     )}
+                    data-stream-id={stream.id}
                     style={{
                       ...provided.draggableProps.style,
                     }}
