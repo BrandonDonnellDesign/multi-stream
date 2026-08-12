@@ -2,8 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Check, ExternalLink, FlaskConical, Loader2, ShieldCheck, Unplug } from "lucide-react";
-import { Switch } from "@/components/ui/switch";
+import { Check, ExternalLink, Loader2, ShieldCheck, Unplug } from "lucide-react";
 
 export function KickApiSettingsContent() {
     const [connected, setConnected] = useState(false);
@@ -47,16 +46,5 @@ export function KickApiSettingsContent() {
 }
 
 export function ApiKeySettings() {
-    const [experimentalPlayer, setExperimentalPlayer] = useState(false);
-    useEffect(() => {
-        // This browser-only preference is available after hydration.
-        // eslint-disable-next-line react-hooks/set-state-in-effect
-        setExperimentalPlayer(localStorage.getItem('experimental-kick-hls') === 'true');
-    }, []);
-    const toggleExperimentalPlayer = (enabled: boolean) => {
-        localStorage.setItem('experimental-kick-hls', String(enabled));
-        setExperimentalPlayer(enabled);
-        window.dispatchEvent(new Event('kick-player-setting'));
-    };
-    return <div className="space-y-3"><KickApiSettingsContent /><div className="rounded-2xl border border-amber-400/15 bg-amber-400/[.04] p-4"><div className="flex items-start justify-between gap-4"><div className="flex gap-3"><FlaskConical className="mt-0.5 h-5 w-5 shrink-0 text-amber-300" /><div><p className="text-sm font-semibold">Experimental quality selector</p><p className="mt-1 text-xs leading-relaxed text-muted-foreground">Use Kick’s direct HLS feed and choose a rendition. Automatically falls back to the official player if blocked.</p></div></div><Switch checked={experimentalPlayer} onCheckedChange={toggleExperimentalPlayer} aria-label="Enable experimental Kick quality selector" /></div></div></div>
+    return <KickApiSettingsContent />
 }
