@@ -1,7 +1,7 @@
 "use client";
+/* eslint-disable @next/next/no-img-element -- chat emotes use dynamic third-party URLs */
 
 import React, { useEffect, useState, useRef } from "react";
-import { getKickChannelInfo } from "@/lib/kick-api";
 import { subscribeToKickChat, unsubscribeFromKickChat } from "@/lib/kick-pusher";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Crown, Sword, BadgeCheck, Diamond } from "lucide-react";
@@ -10,7 +10,7 @@ interface NativeChatProps {
     channelName: string;
 }
 
-interface ChatMessage {
+export interface ChatMessage {
     id: string;
     content: string;
     sender: {
@@ -76,10 +76,7 @@ export function NativeChat({ channelName }: NativeChatProps) {
     useEffect(() => {
         if (!chatroomId) return;
 
-        // Reset messages on channel change
-        setMessages([]);
-
-        const channel = subscribeToKickChat(chatroomId, (data) => {
+        subscribeToKickChat<ChatMessage>(chatroomId, (data) => {
             setMessages((prev) => {
                 // Limit message history to 200
                 const newMessages = [...prev, data];
@@ -95,9 +92,6 @@ export function NativeChat({ channelName }: NativeChatProps) {
 
 
 
-    // ... (keep Pusher subscription)
-
-    // Parse message content for Kick emotes AND 7TV emotes
     // Parse message content for Kick emotes AND 7TV emotes
     const renderContent = (content: string) => {
         const kickEmoteRegex = /\[emote:(\d+):([\w\s]+)\]/g;

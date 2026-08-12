@@ -4,7 +4,6 @@ import { useState } from "react";
 import { Send, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { sendKickMessage, getKickChannelInfo } from "@/lib/kick-api";
 import { useChannelEmotes, Emote } from "@/hooks/use-channel-emotes";
 import { EmotePicker } from "./emote-picker";
 
@@ -21,28 +20,20 @@ export function KickChatInput({ channelName }: KickChatInputProps) {
     const handleSend = async () => {
         if (!message.trim()) return;
 
-        const token = localStorage.getItem("kick_oauth_token");
-        if (!token) {
-            setError("No API Token found. Please set it in Settings.");
-            return;
-        }
-
         setIsSending(true);
         setError(null);
 
         try {
-            // We first need the user ID. Ideally we'd cache this or pass it in, 
-            // but fetching it here ensures we have the correct ID for the channel.
-            // Optimization: In a real app, cache this ID.
-            const channelInfo = await getKickChannelInfo(channelName);
-            if (!channelInfo || !channelInfo.user_id) {
-                throw new Error("Could not resolve channel ID");
-            }
-
-            await sendKickMessage(channelInfo.user_id, message, token);
+            const response = await fetch('/api/kick/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ channel: channelName, content: message }),
+            });
+            const result = await response.json().catch(() => ({}));
+            if (!response.ok) throw new Error(result.error || 'Failed to send message');
             setMessage("");
-        } catch (err: any) {
-            setError(err.message || "Failed to send message");
+        } catch (err: unknown) {
+            setError(err instanceof Error ? err.message : "Failed to send message");
         } finally {
             setIsSending(false);
         }
@@ -64,7 +55,7 @@ export function KickChatInput({ channelName }: KickChatInputProps) {
     };
 
     return (
-        <div className="p-4 border-t border-muted bg-card">
+        <div className="border-t border-white/8 bg-card p-3">
             {error && (
                 <div className="flex items-center gap-2 text-destructive text-sm mb-2">
                     <AlertCircle className="h-4 w-4" />
@@ -72,20 +63,19 @@ export function KickChatInput({ channelName }: KickChatInputProps) {
                 </div>
             )}
             <div className="flex gap-2">
-                {/* 
                 <EmotePicker
                     kickEmotes={kickEmotes}
                     sevenTVEmotes={sevenTVEmotes}
                     onSelect={handleEmoteSelect}
-                /> 
-                */}
+                />
                 <Input
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
                     onKeyDown={handleKeyDown}
                     placeholder={`Send to ${channelName}...`}
                     disabled={isSending}
-                    className="flex-1"
+                    className="flex-1 rounded-xl border-white/8 bg-white/[.04]"
+                    maxLength={500}
                 />
                 <Button
                     onClick={handleSend}

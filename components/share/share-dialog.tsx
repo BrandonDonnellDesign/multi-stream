@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Copy, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -24,8 +24,9 @@ export function ShareDialog({ streams, open, onOpenChange }: ShareDialogProps) {
 
   useEffect(() => {
     if (open) {
+      // URL generation depends on the browser origin and must run after hydration.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setShareUrl(encodeStreamsToUrl(streams));
-      setCopied(false);
     }
   }, [open, streams]);
 
@@ -34,8 +35,7 @@ export function ShareDialog({ streams, open, onOpenChange }: ShareDialogProps) {
       await navigator.clipboard.writeText(shareUrl);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
-    } catch (error) {
-      console.error("Failed to copy:", error);
+    } catch {
     }
   };
 

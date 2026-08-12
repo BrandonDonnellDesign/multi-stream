@@ -1,17 +1,18 @@
 "use client";
-import { Menu, MessageSquare } from "lucide-react";
+import { Menu, MessageSquare, Share2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sidebar } from "@/components/sidebar/sidebar";
 import { StreamGrid } from "@/components/stream/stream-grid";
 import { ChatPanel } from "@/components/chat/chat-panel";
 import { useStreams } from "@/hooks/use-streams";
 import { useState } from "react";
+import { ShareDialog } from "@/components/share/share-dialog";
 
 export default function MultiStreamViewer() {
   const [maxColumns, setMaxColumns] = useState<number>(3);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [activeChatStreamId, setActiveChatStreamId] = useState<string | null>(null);
-  const [activeStreamIndex, setActiveStreamIndex] = useState(0);
+  const [isShareOpen, setIsShareOpen] = useState(false);
   const {
     streams,
     addStream,
@@ -23,91 +24,83 @@ export default function MultiStreamViewer() {
     reorderStreams,
   } = useStreams();
 
-  const visibleStreams = streams.filter((s) => s.visible);
+  const handleToggleChat = (id: string) => {
+    const stream = streams.find((s) => s.id === id);
+    if (!stream) return;
+    if (stream.chatEnabled && activeChatStreamId === null) {
+      setActiveChatStreamId(id);
+      return;
+    }
+    toggleStreamChat(id);
+    if (!stream.chatEnabled) {
+      setActiveChatStreamId(id);
+    } else if (activeChatStreamId === id) {
+      // chat is being disabled and it was active — find another
+      const next = streams.find((s) => s.chatEnabled && s.id !== id);
+      setActiveChatStreamId(next?.id ?? null);
+    }
+  };
+
+  const handleToggleAllChats = (enabled: boolean) => {
+    toggleAllChats(enabled);
+    setActiveChatStreamId(enabled
+      ? streams.find((stream) => stream.platform !== "youtube")?.id ?? null
+      : null);
+  };
+
+  const handleRemoveStream = (id: string) => {
+    removeStream(id);
+    if (activeChatStreamId === id) {
+      setActiveChatStreamId(
+        streams.find((stream) => stream.id !== id && stream.chatEnabled)?.id ?? null
+      );
+    }
+  };
 
   return (
-    <div className="flex h-screen overflow-hidden bg-background">
+    <div className="app-shell flex h-dvh overflow-hidden bg-background text-foreground">
       <Sidebar
         isOpen={isSidebarOpen}
         streams={streams}
         onClose={() => setIsSidebarOpen(!isSidebarOpen)}
         onAddStream={addStream}
         onToggleVisibility={toggleStreamVisibility}
-        onToggleChat={(id) => {
-          toggleStreamChat(id); // Only toggle chat for this stream
-          const idx = streams.findIndex(s => s.id === id);
-          if (idx !== -1 && streams[idx].chatEnabled === false) {
-            // If chat is being enabled, set as active in chat panel
-            setActiveStreamIndex(idx);
-            setActiveChatStreamId(id);
-          } else if (idx !== -1 && streams[idx].chatEnabled === true && activeChatStreamId === id) {
-            // If chat is being disabled and it's the active chat, find another enabled chat
-            const enabledIdx = streams.findIndex((s, i) => s.chatEnabled && s.id !== id);
-            if (enabledIdx !== -1) {
-              setActiveStreamIndex(enabledIdx);
-              setActiveChatStreamId(streams[enabledIdx].id);
-            } else {
-              setActiveChatStreamId(null);
-            }
-          }
-        }}
-        onToggleAllChats={() => setActiveChatStreamId(null)}
+        onToggleChat={handleToggleChat}
+        onToggleAllChats={handleToggleAllChats}
         onRefresh={refreshStream}
-        onRemove={removeStream}
+        onRemove={handleRemoveStream}
         onReorder={reorderStreams}
         maxColumns={maxColumns}
         setMaxColumns={setMaxColumns}
         isChatOpen={!!activeChatStreamId}
         activeStreamId={activeChatStreamId ?? undefined}
-        setActiveStreamIndex={setActiveStreamIndex}
       />
 
-      <main className="flex-1 min-h-0 relative">
-        {!isSidebarOpen && (
-          <Button
-            variant="outline"
-            size="icon"
-            onClick={() => setIsSidebarOpen(true)}
-            className="fixed top-4 left-4 z-50"
-          >
-            <Menu className="h-4 w-4" />
-          </Button>
-        )}
-
-        <div className="flex h-full">
+      <main className="flex min-w-0 flex-1 flex-col p-2 sm:p-3">
+        <header className="mb-2 flex h-14 shrink-0 items-center justify-between rounded-2xl border border-white/8 bg-card/70 px-3 shadow-[0_16px_50px_rgba(0,0,0,.18)] backdrop-blur-xl sm:px-4">
+          <div className="flex min-w-0 items-center gap-3">
+            {!isSidebarOpen && <Button variant="ghost" size="icon" onClick={() => setIsSidebarOpen(true)} aria-label="Open stream manager" className="h-9 w-9 rounded-xl"><Menu className="h-4 w-4" /></Button>}
+            <div className="min-w-0"><p className="truncate text-sm font-semibold">Live workspace</p><p className="text-[11px] text-muted-foreground">{streams.filter((stream) => stream.visible).length} on stage · {streams.length} total</p></div>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="hidden items-center gap-2 rounded-full border border-white/8 bg-white/[.03] px-3 py-1.5 text-xs text-muted-foreground md:flex"><span className="relative flex h-2 w-2"><span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-50" /><span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" /></span>Session ready</div>
+            <Button variant="ghost" size="sm" className="h-9 rounded-xl px-3" onClick={() => setIsShareOpen(true)}><Share2 className="mr-2 h-4 w-4" />Share</Button>
+            <Button variant={activeChatStreamId ? "default" : "ghost"} size="sm" className="h-9 rounded-xl px-3" onClick={() => activeChatStreamId ? setActiveChatStreamId(null) : handleToggleAllChats(true)} disabled={!streams.some((stream) => stream.platform !== "youtube")}><MessageSquare className="mr-2 h-4 w-4" />Chat</Button>
+          </div>
+        </header>
+        <div className="flex min-h-0 flex-1 gap-2">
           <div className="flex-1 min-h-0">
-            <StreamGrid streams={visibleStreams} onReorder={reorderStreams} maxColumns={maxColumns} />
+            <StreamGrid streams={streams} onReorder={reorderStreams} maxColumns={maxColumns} />
           </div>
           <ChatPanel
             streams={streams}
             isOpen={!!activeChatStreamId}
-            activeStreamIndex={activeStreamIndex}
-            setActiveStreamIndex={(idx) => {
-              setActiveStreamIndex(idx);
-              // Find enabled chats
-              const enabledChats = streams.filter(s => s.chatEnabled);
-              setActiveChatStreamId(enabledChats[idx]?.id ?? null);
-            }}
-            onToggle={() => {
-              // Disable chat for the active stream only
-              const enabledChats = streams.filter(s => s.chatEnabled);
-              const closingId = enabledChats[activeStreamIndex]?.id;
-              if (closingId) {
-                toggleStreamChat(closingId);
-                // After closing, get new enabled chats
-                const newEnabledChats = streams.filter(s => s.chatEnabled && s.id !== closingId);
-                if (newEnabledChats.length > 0) {
-                  // If there are still enabled chats, set to first one
-                  setActiveStreamIndex(0);
-                  setActiveChatStreamId(newEnabledChats[0].id);
-                } else {
-                  // No enabled chats left, close panel
-                  setActiveChatStreamId(null);
-                }
-              }
-            }}
+            activeStreamId={activeChatStreamId}
+            onSelectStream={setActiveChatStreamId}
+            onClose={() => setActiveChatStreamId(null)}
           />
         </div>
+        <ShareDialog streams={streams} open={isShareOpen} onOpenChange={setIsShareOpen} />
       </main>
     </div>
   );

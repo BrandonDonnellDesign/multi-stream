@@ -107,35 +107,53 @@
 }
 
 @layer base {
-    :root {
-  --background: 240 20% 6%; /* Twitch/Kick: deep black */
-  --foreground: 0 0% 100%; /* pure white */
-  --card: 240 12% 14%; /* dark slate for sidebar/cards */
+  :root {
+  --background: 225 24% 96%;
+  --foreground: 240 20% 10%;
+  --card: 0 0% 100%;
+  --card-foreground: 240 20% 10%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 240 20% 10%;
+  --primary: 258 90% 62%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 120 100% 45%; /* Kick green */
+  --secondary-foreground: 240 20% 10%;
+  --muted: 220 14% 92%;
+  --muted-foreground: 220 10% 40%;
+  --accent: 258 90% 62%;
+  --accent-foreground: 240 20% 10%;
+  --destructive: 0 90% 55%; /* punchy red */
+  --destructive-foreground: 0 0% 100%;
+  --border: 220 14% 86%;
+  --input: 220 14% 86%;
+  --ring: 245 100% 60%; /* Twitch purple for focus */
+  }
+
+  .dark {
+  --background: 228 24% 6%;
+  --foreground: 0 0% 100%;
+  --card: 228 20% 9%;
   --card-foreground: 0 0% 100%;
   --popover: 240 12% 18%;
   --popover-foreground: 0 0% 100%;
-  --primary: 245 100% 60%; /* Twitch purple */
-  --primary-foreground: 0 0% 100%;
-  --secondary: 120 100% 45%; /* Kick green */
-  --secondary-foreground: 0 0% 100%;
-  --muted: 240 10% 40%; /* light gray for body text */
-  --muted-foreground: 0 0% 80%;
-  --accent: 200 100% 55%; /* electric blue accent */
+  --muted: 226 15% 16%;
+  --muted-foreground: 222 10% 61%;
   --accent-foreground: 0 0% 100%;
-  --destructive: 0 90% 55%; /* punchy red */
-  --destructive-foreground: 0 0% 100%;
-  --border: 240 12% 18%;
-  --input: 240 12% 18%;
-  --ring: 245 100% 60%; /* Twitch purple for focus */
+  --border: 225 14% 18%;
+  --input: 225 14% 18%;
     }
 }
 @layer base {
-  body { background-color: #09090b;
+  body { background-color: hsl(var(--background)); color: hsl(var(--foreground));
   }
   * {
     @apply border-border font-sans;
   }
 }
+
+.app-shell { background: radial-gradient(circle at 72% -10%, hsl(258 90% 62% / .12), transparent 32rem), radial-gradient(circle at 8% 110%, hsl(190 90% 50% / .07), transparent 28rem), hsl(var(--background)); }
+.stage-surface { background-color: hsl(228 24% 4% / .82); background-image: radial-gradient(hsl(225 12% 30% / .28) .65px, transparent .65px); background-size: 18px 18px; }
+button, input, [role="button"] { -webkit-tap-highlight-color: transparent; }
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {

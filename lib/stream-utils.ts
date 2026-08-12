@@ -5,17 +5,20 @@ export function getStreamUrl(stream: Stream): string {
   const hostname = window.location.hostname;
   
   if (stream.platform === "twitch") {
-    return `https://player.twitch.tv/?channel=${stream.channel}&parent=${hostname}`;
+    return `https://player.twitch.tv/?channel=${encodeURIComponent(stream.channel)}&parent=${hostname}`;
+  }
+  if (stream.platform === "youtube") {
+    return `https://www.youtube.com/embed/${encodeURIComponent(stream.channel)}?autoplay=1`;
   }
   
-  return `https://player.kick.com/${stream.channel}`;
+  return `https://player.kick.com/${encodeURIComponent(stream.channel)}`;
 }
 
 export function encodeStreamsToUrl(streams: Stream[]): string {
   const streamParams = streams
     .filter(s => s.visible)
     .map(s => {
-      const platformShort = s.platform === "twitch" ? "t" : s.platform === "kick" ? "k" : s.platform;
+      const platformShort = s.platform === "twitch" ? "t" : s.platform === "kick" ? "k" : "y";
       return `${platformShort}:${s.channel}`;
     })
     .join(',');
@@ -33,13 +36,13 @@ export function decodeStreamsFromUrl(): Stream[] {
     
     return streamParam.split(',').map(streamStr => {
       const [platformShort, channel] = streamStr.split(':');
-      if (!platformShort || !channel || !['t', 'k'].includes(platformShort)) {
+      if (!platformShort || !channel || !['t', 'k', 'y'].includes(platformShort)) {
         throw new Error('Invalid stream format');
       }
-      const platform = platformShort === "t" ? "twitch" : platformShort === "k" ? "kick" : platformShort;
+      const platform = platformShort === "t" ? "twitch" : platformShort === "k" ? "kick" : "youtube";
       return {
         id: `${platform}-${channel}-${Date.now()}`,
-        platform: platform as "twitch" | "kick",
+        platform,
         channel,
         visible: true,
         chatEnabled: false, // Add the required chatEnabled property
@@ -47,8 +50,7 @@ export function decodeStreamsFromUrl(): Stream[] {
         isLive: false
       };
     });
-  } catch (error) {
-    console.error('Error decoding streams from URL:', error);
+  } catch {
     return [];
   }
 }
@@ -61,8 +63,7 @@ export async function getStreamData(stream: Stream): Promise<Partial<Stream>> {
         isLive: videoData.live,
         title: videoData.title,
       };
-    } catch (error) {
-      console.error("Error fetching YouTube video data:", error);
+    } catch {
       return {
         isLive: false,
         title: "Offline",

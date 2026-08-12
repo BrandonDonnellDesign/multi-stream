@@ -30,7 +30,7 @@ A live stream aggregator that lets you watch multiple streams from different pla
 -   **APIs:**
     -   Kick API: For fetching Kick stream data.
     -   Twitch API: For fetching Twitch stream data.
-    -   YouTube API: For fetching YouTube stream data.
+    -   YouTube embeds: For viewing videos and live-stream IDs.
 
 ## 🚀 Setup
 
@@ -59,10 +59,10 @@ bash
 4.  **Environment Variables:**
 
     - Create a `.env.local` file in the root of the project.
-    - Add API keys for the Kick, Twitch, and YouTube APIs to the `.env.local`. example:
+    - Add your server-side Twitch credentials to `.env.local`. Never prefix the client secret with `NEXT_PUBLIC_`:
 ```
-    NEXT_PUBLIC_TWITCH_CLIENT_ID=your_twitch_client_id
-    NEXT_PUBLIC_YOUTUBE_API_KEY=your_youtube_api_key
+    TWITCH_CLIENT_ID=your_twitch_client_id
+    TWITCH_CLIENT_SECRET=your_twitch_client_secret
     
 ```
 5.  **Start the Development Server:**

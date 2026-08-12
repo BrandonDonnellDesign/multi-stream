@@ -2,38 +2,41 @@
 
 import { useState, useEffect } from "react";
 import { Stream } from "@/types/stream";
-import { checkStreamStatus } from "@/lib/twitch-api";
-import { checkKickStreamStatus } from "@/lib/kick-api";
 
 export function useVisibleStreams(streams: Stream[]) {
-  const [visibleStreams, setVisibleStreams] = useState<Stream[]>([]);
+  const [liveById, setLiveById] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
     const checkStreamStatuses = async () => {
-      const checkedStreams = await Promise.all(
+      const statuses = await Promise.all(
         streams.map(async (stream) => {
-          const isLive = stream.platform === 'twitch'
-            ? await checkStreamStatus(stream.channel)
-            : await checkKickStreamStatus(stream.channel);
-          return {
-            ...stream,
-            isLive
-          };
+          if (stream.platform === "youtube") return [stream.id, true] as const;
+          try {
+            // Kick's channel response exposes `livestream: null` immediately when
+            // a channel is offline. Check it from the browser first (the original
+            // auto-hide path), because Kick can block this legacy endpoint when
+            // it is requested from a server/datacenter address.
+            if (stream.platform === "kick") {
+              const kickResponse = await fetch(`https://kick.com/api/v2/channels/${encodeURIComponent(stream.channel)}`);
+              if (kickResponse.ok) {
+                const kickData = await kickResponse.json() as { livestream?: unknown };
+                return [stream.id, kickData.livestream != null] as const;
+              }
+            }
+            const params = new URLSearchParams({ platform: stream.platform, channel: stream.channel });
+            const response = await fetch(`/api/streams/status?${params}`);
+            if (!response.ok) return [stream.id, undefined] as const;
+            const data = await response.json() as { isLive: boolean };
+            return [stream.id, data.isLive] as const;
+          } catch {
+            return [stream.id, undefined] as const;
+          }
         })
       );
-      // Only filter, do not reconstruct streams
-      const newVisible = streams.map((stream, idx) => ({
-        ...stream,
-        isLive: checkedStreams[idx].isLive
-      })).filter((stream) => stream.isLive && stream.visible);
-
-      setVisibleStreams(prev => {
-        // Simple length check first
-        if (prev.length !== newVisible.length) return newVisible;
-
-        // Check if IDs are the same
-        const isSame = prev.every((s, i) => s.id === newVisible[i].id && s.isLive === newVisible[i].isLive);
-        return isSame ? prev : newVisible;
+      setLiveById((previous) => {
+        const next = { ...previous };
+        for (const [id, isLive] of statuses) if (isLive !== undefined) next[id] = isLive;
+        return next;
       });
     };
 
@@ -42,5 +45,9 @@ export function useVisibleStreams(streams: Stream[]) {
     return () => clearInterval(interval);
   }, [streams]);
 
-  return visibleStreams;
+  // Treat an unknown status as visible. A temporary API failure should never
+  // make a stream disappear; only a confirmed offline response hides it.
+  return streams
+    .filter((stream) => stream.visible && liveById[stream.id] !== false)
+    .map((stream) => ({ ...stream, isLive: liveById[stream.id] }));
 }

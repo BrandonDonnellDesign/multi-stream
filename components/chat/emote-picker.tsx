@@ -1,4 +1,5 @@
 "use client";
+/* eslint-disable @next/next/no-img-element -- emotes use dynamic third-party URLs */
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";

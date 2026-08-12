@@ -7,33 +7,28 @@ interface PlatformPlayerProps {
   className?: string;
 }
 
+function getStreamUrl(stream: Stream): string {
+  if (stream.platform === "twitch") {
+    return `https://player.twitch.tv/?channel=${encodeURIComponent(stream.channel)}&parent=${window.location.hostname}`;
+  }
+  if (stream.platform === "youtube") {
+    return `https://www.youtube.com/embed/${stream.channel}?autoplay=1`;
+  }
+  return `https://player.kick.com/${encodeURIComponent(stream.channel)}`;
+}
+
 export function PlatformPlayer({ stream, className }: PlatformPlayerProps) {
-  const getStreamUrl = () => {
-    if (stream.platform === "twitch") {
-      return `https://player.twitch.tv/?channel=${stream.channel}&parent=${window.location.hostname}`;
-    }
-    if (stream.platform === "youtube") {
-      return `https://www.youtube.com/embed/${stream.channel}?autoplay=1`
-    }
-    return `https://player.kick.com/${stream.channel}`;
-  };
   return (
-    <div
-      className={cn(
-        "relative w-full h-full shadow-lg ",
-        className
-      )}
-    >
-      <div className={cn("overflow-hidden w-full h-full ")}>
+    <div className={cn("relative w-full h-full shadow-lg", className)}>
+      <div className="overflow-hidden w-full h-full">
         <iframe
-          src={getStreamUrl()}
+          key={stream.playerVersion ?? 0}
+          src={getStreamUrl(stream)}
           allowFullScreen
           title="Stream Player"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
           frameBorder="0"
-          className={cn(
-            "absolute inset-0 w-full h-full "
-          )}
+          className="absolute inset-0 w-full h-full"
           loading="lazy"
         />
       </div>

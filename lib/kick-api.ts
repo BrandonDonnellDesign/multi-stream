@@ -62,7 +62,6 @@ export async function sendKickMessage(broadcasterUserId: string | number, conten
 
     return await response.json();
   } catch (error) {
-    console.error('Failed to send Kick message:', error);
     throw error;
   }
 }

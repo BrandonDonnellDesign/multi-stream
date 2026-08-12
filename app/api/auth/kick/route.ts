@@ -1,13 +1,21 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import crypto from 'crypto';
 import * as cookie from 'cookie';
 
-export async function GET() {
+export async function GET(request: NextRequest) {
     const clientId = process.env.NEXT_PUBLIC_KICK_CLIENT_ID;
     const redirectUri = process.env.NEXT_PUBLIC_KICK_REDIRECT_URI;
 
     if (!clientId || !redirectUri) {
         return NextResponse.json({ error: 'Missing Kick OAuth configuration' }, { status: 500 });
+    }
+
+    const callbackOrigin = new URL(redirectUri).origin;
+    if (callbackOrigin !== request.nextUrl.origin) {
+        return NextResponse.json({
+            error: 'Kick OAuth callback origin mismatch',
+            details: `This app is running on ${request.nextUrl.origin}, but NEXT_PUBLIC_KICK_REDIRECT_URI uses ${callbackOrigin}.`,
+        }, { status: 500 });
     }
 
     // Generate PKCE Verifier and Challenge

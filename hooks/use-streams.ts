@@ -1,7 +1,17 @@
 
 import { useCallback, useEffect, useState } from "react";
-import { Stream } from "@/types/stream";
+import { Stream, StreamPlatform } from "@/types/stream";
 import { decodeStreamsFromUrl } from "@/lib/stream-utils";
+
+function isStoredStream(value: unknown): value is Stream {
+  if (!value || typeof value !== "object") return false;
+  const stream = value as Partial<Stream>;
+  return typeof stream.id === "string"
+    && typeof stream.channel === "string"
+    && (stream.platform === "twitch" || stream.platform === "kick" || stream.platform === "youtube")
+    && typeof stream.visible === "boolean"
+    && typeof stream.chatEnabled === "boolean";
+}
 
 export function useStreams() {
   const [streams, setStreams] = useState<Stream[]>([]);
@@ -10,14 +20,36 @@ export function useStreams() {
   useEffect(() => {
     if (!isInitialized) {
       const urlStreams = decodeStreamsFromUrl();
-      if (urlStreams.length > 0) {
-        setStreams(urlStreams);
+      const storedStreams = localStorage.getItem("sidebar-streams");
+      let initialStreams = urlStreams;
+
+      if (initialStreams.length === 0 && storedStreams) {
+        try {
+          const parsed: unknown = JSON.parse(storedStreams);
+          if (Array.isArray(parsed) && parsed.every(isStoredStream)) {
+            initialStreams = parsed;
+          } else {
+            localStorage.removeItem("sidebar-streams");
+          }
+        } catch {
+          localStorage.removeItem("sidebar-streams");
+        }
       }
+
+      // Initial state depends on client-only URL and localStorage values.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setStreams(initialStreams);
       setIsInitialized(true);
     }
   }, [isInitialized]);
 
-  const addStream = useCallback((platform: "twitch" | "kick", channel: string) => {
+  useEffect(() => {
+    if (isInitialized) {
+      localStorage.setItem("sidebar-streams", JSON.stringify(streams));
+    }
+  }, [isInitialized, streams]);
+
+  const addStream = useCallback((platform: StreamPlatform, channel: string) => {
     setStreams((prev) => {
       // Check if stream already exists (case insensitive)
       const streamExists = prev.some(
@@ -67,7 +99,10 @@ export function useStreams() {
 
   const toggleAllChats = useCallback((enabled: boolean) => {
     setStreams((prev) =>
-      prev.map((stream) => ({ ...stream, chatEnabled: enabled }))
+      prev.map((stream) => ({
+        ...stream,
+        chatEnabled: stream.platform === "youtube" ? false : enabled,
+      }))
     );
   }, []);
 
@@ -75,7 +110,7 @@ export function useStreams() {
     setStreams((prev) =>
       prev.map((stream) =>
         stream.id === id
-          ? { ...stream, id: `${stream.platform}-${stream.channel}-${Date.now()}` }
+          ? { ...stream, playerVersion: (stream.playerVersion ?? 0) + 1 }
           : stream
       )
     );

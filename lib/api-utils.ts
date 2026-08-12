@@ -1,10 +1,7 @@
 
 export function handleApiError(error: unknown, context: string): void {
-  if (error instanceof Error) {
-    console.error(`${context}:`, error.message);
-  } else {
-    console.error(`${context}:`, error);
-  }
+  void error;
+  void context;
 }
 
 export async function fetchWithTimeout(

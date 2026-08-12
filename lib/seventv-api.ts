@@ -40,8 +40,7 @@ export async function getSevenTVEmotes(kickUserId?: string | number): Promise<Ma
             processEmotes(userData.emote_set.emotes, emoteMap);
         }
 
-    } catch (error) {
-        console.warn('Failed to fetch 7TV emotes:', error);
+    } catch {
     }
 
     return emoteMap;

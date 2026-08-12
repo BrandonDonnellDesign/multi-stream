@@ -13,21 +13,23 @@ interface ChatControlsProps {
 }
 
 export function ChatControls({ streams, onToggleAllChats, compact, isChatOpen }: ChatControlsProps) {
-  const allChatsEnabled = streams.every(s => s.chatEnabled);
-  const chatOpen = typeof isChatOpen === "boolean" ? isChatOpen : allChatsEnabled;
+  const chatCapableStreams = streams.filter((stream) => stream.platform !== "youtube");
+  const hasEnabledChats = chatCapableStreams.some((stream) => stream.chatEnabled);
+  const chatOpen = typeof isChatOpen === "boolean" ? isChatOpen : hasEnabledChats;
   return (
-    <div className={cn("rounded-xl shadow-md bg-card", compact ? "p-2" : "p-4")}> 
+    <div className={cn("rounded-2xl", compact ? "" : "p-2")}> 
       <Button
         variant="default"
         size="default"
-        onClick={() => onToggleAllChats(!chatOpen)}
-        className="w-full rounded-xl border-none shadow-none focus:outline-none focus:ring-0 bg-accent text-background hover:bg-accent/80"
+        onClick={() => onToggleAllChats(!hasEnabledChats)}
+        disabled={chatCapableStreams.length === 0}
+        className="w-full rounded-xl border border-white/8 bg-white/[.04] text-foreground shadow-none hover:bg-white/[.08]"
       >{chatOpen ? (
           <MessageCircleOff className="h-5 w-5 mr-2" />
         ) : (
           <MessageCircle className="h-5 w-5 mr-2" />
         )}
-        {chatOpen ? "Disable All Chats" : "Enable All Chats"}
+        {hasEnabledChats ? "Disable All Chats" : "Enable All Chats"}
       </Button>
     </div>
   )

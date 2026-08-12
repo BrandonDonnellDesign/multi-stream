@@ -1,5 +1,3 @@
-import { Stream } from "@/types/stream";
-
 export async function shareStreams(url: string): Promise<{ success: boolean; message: string }> {
   try {
     // Check if running in a secure context

@@ -8,7 +8,7 @@ export async function GET(request: NextRequest) {
     const error = searchParams.get('error');
 
     if (error) {
-        return NextResponse.json({ error }, { status: 400 });
+        return NextResponse.redirect(new URL(`/?kick_error=${encodeURIComponent(error)}`, request.url));
     }
 
     const cookieStore = await cookies();
@@ -16,11 +16,11 @@ export async function GET(request: NextRequest) {
     const codeVerifier = cookieStore.get('kick_code_verifier')?.value;
 
     if (!state || !storedState || state !== storedState) {
-        return NextResponse.json({ error: 'Invalid state' }, { status: 400 });
+        return NextResponse.redirect(new URL('/?kick_error=oauth_state_expired', request.url));
     }
 
     if (!code || !codeVerifier) {
-        return NextResponse.json({ error: 'Missing code or code verifier' }, { status: 400 });
+        return NextResponse.redirect(new URL('/?kick_error=oauth_session_expired', request.url));
     }
 
     const clientId = process.env.NEXT_PUBLIC_KICK_CLIENT_ID;
@@ -49,40 +49,36 @@ export async function GET(request: NextRequest) {
 
         if (!tokenResponse.ok) {
             const errText = await tokenResponse.text();
-            console.error("Token exchange failed:", errText);
             return NextResponse.json({ error: 'Failed to exchange token', details: errText }, { status: tokenResponse.status });
         }
 
-        const tokenData = await tokenResponse.json();
-        const accessToken = tokenData.access_token;
-
-        // Redirect to the main page with a query param success message
-        // We will set a cookie that is NOT httpOnly so the client can read it, OR
-        // we can return a page that writes to localStorage.
-        // Setting a cookie readable by JS is the easiest way to bridge to our current localStorage-based client code,
-        // although simply using the cookie on the client side would be better.
-        // Given the existing architecture looks for localStorage item 'kick_oauth_token', let's render a page that sets it.
-
-        const html = `
-      <html>
-        <body>
-          <script>
-            localStorage.setItem('kick_oauth_token', '${accessToken}');
-            window.location.href = '/multistream?kick_connected=true';
-          </script>
-          <p>Redirecting...</p>
-        </body>
-      </html>
-    `;
-
-        return new NextResponse(html, {
-            headers: {
-                'Content-Type': 'text/html',
-            },
+        const tokenData = await tokenResponse.json() as {
+            access_token: string;
+            refresh_token?: string;
+            expires_in?: number;
+        };
+        const response = NextResponse.redirect(new URL('/?kick_connected=true', request.url));
+        const cookieOptions = {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'lax' as const,
+            path: '/',
+        };
+        response.cookies.set('kick_access_token', tokenData.access_token, {
+            ...cookieOptions,
+            maxAge: tokenData.expires_in ?? 3600,
         });
+        if (tokenData.refresh_token) {
+            response.cookies.set('kick_refresh_token', tokenData.refresh_token, {
+                ...cookieOptions,
+                maxAge: 60 * 60 * 24 * 30,
+            });
+        }
+        response.cookies.delete('kick_code_verifier');
+        response.cookies.delete('kick_oauth_state');
+        return response;
 
-    } catch (err) {
-        console.error(err);
+    } catch {
         return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
     }
 }

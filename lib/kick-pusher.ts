@@ -15,12 +15,15 @@ export const getPusherInstance = () => {
     return pusherInstance;
 };
 
-export const subscribeToKickChat = (chatroomId: string | number, onMessage: (data: any) => void) => {
+export const subscribeToKickChat = <TMessage>(
+    chatroomId: string | number,
+    onMessage: (data: TMessage) => void
+) => {
     const pusher = getPusherInstance();
     const channelName = `chatrooms.${chatroomId}.v2`;
     const channel = pusher.subscribe(channelName);
 
-    channel.bind('App\\Events\\ChatMessageEvent', (data: any) => {
+    channel.bind('App\\Events\\ChatMessageEvent', (data: TMessage) => {
         onMessage(data);
     });
 

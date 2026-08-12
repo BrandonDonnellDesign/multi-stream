@@ -13,7 +13,6 @@ async function getAccessToken(): Promise<string | null> {
   const clientSecret = process.env.NEXT_PUBLIC_TWITCH_CLIENT_SECRET;
 
   if (!clientId || !clientSecret) {
-    console.error('Twitch API credentials not configured');
     return null;
   }
 
@@ -39,8 +38,7 @@ async function getAccessToken(): Promise<string | null> {
     tokenExpiry = Date.now() + (data.expires_in * 1000);
     
     return accessToken;
-  } catch (error) {
-    console.error('Error getting Twitch access token:', error);
+  } catch {
     return null;
   }
 }
@@ -49,7 +47,6 @@ export async function checkStreamStatus(channelName: string): Promise<boolean> {
   const clientId = process.env.NEXT_PUBLIC_TWITCH_CLIENT_ID;
   
   if (!clientId) {
-    console.error('Twitch client ID not configured');
     return false;
   }
 
@@ -73,8 +70,7 @@ export async function checkStreamStatus(channelName: string): Promise<boolean> {
 
     const data = await response.json();
     return data.data.length > 0;
-  } catch (error) {
-    console.error('Error checking stream status:', error);
+  } catch {
     return false;
   }
 }

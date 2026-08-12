@@ -9,4 +9,5 @@ export type Stream = {
   manuallyHidden?: boolean; 
   isLive?: boolean; // Track live status
   title?: string;
+  playerVersion?: number;
 };

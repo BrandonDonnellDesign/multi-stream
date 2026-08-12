@@ -1,6 +1,6 @@
 import { SVGProps } from 'react';
 
-interface IconProps extends SVGProps<SVGSVGElement> {}
+type IconProps = SVGProps<SVGSVGElement>;
 
 export const KickIcon = (props: IconProps) => (
   <svg

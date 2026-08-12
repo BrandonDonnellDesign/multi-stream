@@ -2,7 +2,7 @@
 
 import { Stream } from "@/types/stream";
 import { StreamCard } from "@/components/stream/stream-card";
-import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
+import { DragDropContext, Draggable, Droppable, DropResult } from "@hello-pangea/dnd";
 
 interface StreamListProps {
   streams: Stream[];
@@ -13,7 +13,6 @@ interface StreamListProps {
   onReorder: (streams: Stream[]) => void;
   isChatOpen?: boolean;
   activeStreamId?: string;
-  onSelectStream?: (index: number) => void;
 }
 
 export function StreamList({
@@ -25,9 +24,8 @@ export function StreamList({
   onReorder,
   isChatOpen,
   activeStreamId,
-  onSelectStream,
 }: StreamListProps) {
-  const handleDragEnd = (result: any) => {
+  const handleDragEnd = (result: DropResult) => {
     if (!result.destination) return;
 
     const items = Array.from(streams);
@@ -66,7 +64,6 @@ export function StreamList({
                         onRemove={onRemove}
                         isChatOpen={isChatOpen}
                         activeStreamId={activeStreamId}
-                        onSelect={() => onSelectStream && onSelectStream(index)}
                       />
                   </div>
                 )}

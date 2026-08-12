@@ -24,7 +24,6 @@ export function useChannelEmotes(channelName: string) {
 
                 if (!mounted) return;
 
-                if (mounted) console.log("DEBUG: Kick Data:", kickData);
 
                 if (kickData?.chatroom?.id) {
                     setChatroomId(kickData.chatroom.id);
@@ -71,12 +70,10 @@ export function useChannelEmotes(channelName: string) {
                         }));
                         setSevenTVEmotes(s_emotes);
                     }
-                } catch (e) {
-                    console.error("Failed to fetch 7TV emotes", e);
+                } catch {
                 }
 
-            } catch (err) {
-                console.error("Failed to fetch channel emotes", err);
+            } catch {
             }
         }
 
