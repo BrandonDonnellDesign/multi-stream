@@ -12,17 +12,6 @@ export function useVisibleStreams(streams: Stream[]) {
         streams.map(async (stream) => {
           if (stream.platform === "youtube") return [stream.id, true] as const;
           try {
-            // Kick's channel response exposes `livestream: null` immediately when
-            // a channel is offline. Check it from the browser first (the original
-            // auto-hide path), because Kick can block this legacy endpoint when
-            // it is requested from a server/datacenter address.
-            if (stream.platform === "kick") {
-              const kickResponse = await fetch(`https://kick.com/api/v2/channels/${encodeURIComponent(stream.channel)}`);
-              if (kickResponse.ok) {
-                const kickData = await kickResponse.json() as { livestream?: unknown };
-                return [stream.id, kickData.livestream != null] as const;
-              }
-            }
             const params = new URLSearchParams({ platform: stream.platform, channel: stream.channel });
             const response = await fetch(`/api/streams/status?${params}`);
             if (!response.ok) return [stream.id, undefined] as const;

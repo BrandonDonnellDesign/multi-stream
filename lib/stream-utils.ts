@@ -1,19 +1,6 @@
 import { getVideoInfo } from "@/lib/youtube-api";
 import { Stream } from "@/types/stream";
 
-export function getStreamUrl(stream: Stream): string {
-  const hostname = window.location.hostname;
-  
-  if (stream.platform === "twitch") {
-    return `https://player.twitch.tv/?channel=${encodeURIComponent(stream.channel)}&parent=${hostname}`;
-  }
-  if (stream.platform === "youtube") {
-    return `https://www.youtube.com/embed/${encodeURIComponent(stream.channel)}?autoplay=1`;
-  }
-  
-  return `https://player.kick.com/${encodeURIComponent(stream.channel)}`;
-}
-
 export function encodeStreamsToUrl(streams: Stream[]): string {
   const streamParams = streams
     .filter(s => s.visible)

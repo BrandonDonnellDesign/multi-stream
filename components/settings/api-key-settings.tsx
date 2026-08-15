@@ -12,10 +12,6 @@ export function KickApiSettingsContent() {
         fetch('/api/kick/session').then((response) => response.json()).then((data) => setConnected(Boolean(data.connected))).finally(() => setLoading(false));
     }, []);
 
-    const handleLogin = () => {
-        window.location.href = "/api/auth/kick";
-    };
-
     const handleLogout = async () => {
         setLoading(true);
         await fetch('/api/kick/session', { method: 'DELETE' });
@@ -37,7 +33,7 @@ export function KickApiSettingsContent() {
                 </div>
             ) : (
                 <div className="space-y-3">
-                    <Button onClick={handleLogin} className="w-full rounded-xl bg-[#53FC18] text-black hover:bg-[#53FC18]/90">Connect with Kick<ExternalLink className="ml-2 h-4 w-4" /></Button>
+                    <Button asChild className="w-full rounded-xl bg-[#53FC18] text-black hover:bg-[#53FC18]/90"><a href="/api/auth/kick">Connect with Kick<ExternalLink className="ml-2 h-4 w-4" /></a></Button>
                     <p className="text-center text-[11px] text-muted-foreground">You’ll be redirected to Kick to approve access.</p>
                 </div>
             )}

@@ -2,9 +2,12 @@ import { NextRequest, NextResponse } from "next/server";
 
 const TWITCH_TOKEN_URL = "https://id.twitch.tv/oauth2/token";
 const TWITCH_STREAMS_URL = "https://api.twitch.tv/helix/streams";
+const KICK_TOKEN_URL = "https://id.kick.com/oauth/token";
+const KICK_CHANNELS_URL = "https://api.kick.com/public/v1/channels";
 const CHANNEL_PATTERN = /^[a-zA-Z0-9_-]{1,64}$/;
 
 let twitchToken: { value: string; expiresAt: number } | null = null;
+let kickToken: { value: string; expiresAt: number } | null = null;
 
 async function getTwitchToken() {
   if (twitchToken && twitchToken.expiresAt > Date.now()) return twitchToken.value;
@@ -45,12 +48,51 @@ async function isTwitchLive(channel: string) {
 }
 
 async function isKickLive(channel: string) {
-  const response = await fetch(`https://kick.com/api/v2/channels/${encodeURIComponent(channel)}`, {
-    next: { revalidate: 60 },
+  const clientId = process.env.NEXT_PUBLIC_KICK_CLIENT_ID;
+  const token = await getKickToken();
+  if (!clientId || !token) return null;
+
+  const params = new URLSearchParams({ slug: channel.trim().toLowerCase() });
+  const response = await fetch(`${KICK_CHANNELS_URL}?${params}`, {
+    headers: {
+      Accept: "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    cache: "no-store",
   });
   if (!response.ok) return null;
-  const data = await response.json() as { livestream?: unknown };
-  return data.livestream != null;
+  const payload = await response.json() as {
+    data?: Array<{ stream?: { is_live?: boolean } }>;
+  };
+  return payload.data?.[0]?.stream?.is_live === true;
+}
+
+async function getKickToken() {
+  if (kickToken && kickToken.expiresAt > Date.now()) return kickToken.value;
+
+  const clientId = process.env.NEXT_PUBLIC_KICK_CLIENT_ID;
+  const clientSecret = process.env.KICK_CLIENT_SECRET;
+  if (!clientId || !clientSecret) return null;
+
+  const response = await fetch(KICK_TOKEN_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: new URLSearchParams({
+      grant_type: "client_credentials",
+      client_id: clientId,
+      client_secret: clientSecret,
+    }),
+    cache: "no-store",
+  });
+  if (!response.ok) return null;
+
+  const data = await response.json() as { access_token?: string; expires_in?: number };
+  if (!data.access_token) return null;
+  kickToken = {
+    value: data.access_token,
+    expiresAt: Date.now() + Math.max(0, (data.expires_in ?? 3600) - 60) * 1000,
+  };
+  return kickToken.value;
 }
 
 async function isYouTubeLive(videoId: string) {

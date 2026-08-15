@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import crypto from 'crypto';
-import * as cookie from 'cookie';
+import { stringifySetCookie } from 'cookie';
 
 export async function GET(request: NextRequest) {
     const clientId = process.env.NEXT_PUBLIC_KICK_CLIENT_ID;
@@ -43,7 +43,7 @@ export async function GET(request: NextRequest) {
     const response = NextResponse.redirect(url);
 
     // Store code_verifier and state in cookies for callback verification
-    response.headers.append('Set-Cookie', cookie.serialize('kick_code_verifier', codeVerifier, {
+    response.headers.append('Set-Cookie', stringifySetCookie({ name: 'kick_code_verifier', value: codeVerifier,
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         maxAge: 60 * 10, // 10 minutes
@@ -51,7 +51,7 @@ export async function GET(request: NextRequest) {
         sameSite: 'lax',
     }));
 
-    response.headers.append('Set-Cookie', cookie.serialize('kick_oauth_state', state, {
+    response.headers.append('Set-Cookie', stringifySetCookie({ name: 'kick_oauth_state', value: state,
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         maxAge: 60 * 10, // 10 minutes
