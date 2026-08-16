@@ -76,8 +76,13 @@ function KickPlayer({ stream }: { stream: Stream }) {
     if (!video) return;
 
     let disposed = false;
-    let retryTimer: ReturnType<typeof setTimeout> | undefined;
     let destroyPlayer: (() => void) | undefined;
+    const fallBackToEmbed = () => {
+      if (disposed) return;
+      setError(null);
+      setQualityLevels([]);
+      setUseEmbedFallback(true);
+    };
     const start = async () => {
       setError(null);
       setUseEmbedFallback(false);
@@ -104,7 +109,7 @@ function KickPlayer({ stream }: { stream: Stream }) {
       const { default: Hls } = await import("hls.js");
       if (disposed) return;
       if (!Hls.isSupported()) {
-        setError("HLS playback is not supported by this browser.");
+        fallBackToEmbed();
         return;
       }
 
@@ -135,9 +140,7 @@ function KickPlayer({ stream }: { stream: Stream }) {
         if (data.type === Hls.ErrorTypes.NETWORK_ERROR) {
           hls.destroy();
           if (hlsRef.current === hls) hlsRef.current = null;
-          retryTimer = setTimeout(() => {
-            if (!disposed) void start();
-          }, 2_500);
+          fallBackToEmbed();
           return;
         }
 
@@ -146,9 +149,9 @@ function KickPlayer({ stream }: { stream: Stream }) {
           return;
         }
 
-        setError("Kick playback failed. Try refreshing the stream.");
         hls.destroy();
         if (hlsRef.current === hls) hlsRef.current = null;
+        fallBackToEmbed();
       });
       destroyPlayer = () => {
         hls.destroy();
@@ -158,12 +161,11 @@ function KickPlayer({ stream }: { stream: Stream }) {
 
     void start().catch((reason) => {
       console.error(`Failed to start Kick player for ${channel}:`, reason);
-      setUseEmbedFallback(true);
+      fallBackToEmbed();
     });
 
     return () => {
       disposed = true;
-      if (retryTimer) clearTimeout(retryTimer);
       destroyPlayer?.();
     };
   }, [channel, playerVersion, resolveSource]);
@@ -186,13 +188,20 @@ function KickPlayer({ stream }: { stream: Stream }) {
         autoPlay
         muted
         playsInline
+        onError={() => {
+          setError(null);
+          setQualityLevels([]);
+          setUseEmbedFallback(true);
+        }}
       />
       {useEmbedFallback && (
         <iframe
-          src={`https://player.kick.com/${encodeURIComponent(channel)}`}
+          key={`${channel}-${playerVersion ?? 0}`}
+          src={`https://player.kick.com/${encodeURIComponent(channel.trim().toLowerCase())}?autoplay=true&muted=true`}
           title={`${channel} Kick stream`}
-          allow="autoplay; encrypted-media; fullscreen; picture-in-picture"
+          allow="autoplay; encrypted-media; fullscreen; picture-in-picture; clipboard-write; storage-access"
           allowFullScreen
+          referrerPolicy="strict-origin-when-cross-origin"
           className="absolute inset-0 h-full w-full border-0"
         />
       )}

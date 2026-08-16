@@ -35,7 +35,6 @@ export default function MultiStreamViewer() {
     if (!stream.chatEnabled) {
       setActiveChatStreamId(id);
     } else if (activeChatStreamId === id) {
-      // chat is being disabled and it was active — find another
       const next = streams.find((s) => s.chatEnabled && s.id !== id);
       setActiveChatStreamId(next?.id ?? null);
     }

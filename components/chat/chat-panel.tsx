@@ -75,29 +75,17 @@ export function ChatPanel({ streams: allStreams, isOpen, activeStreamId, onSelec
 
       {activeStream ? (
         <div className="flex-1 overflow-hidden flex flex-col relative bg-zinc-950/30">
-          {/* Render all enabled chats but hide inactive ones to preserve chat state */}
-          {enabledStreams.map((stream) => {
-            const isActive = stream.id === activeStreamId;
-            return (
-              <div
-                key={stream.id}
-                className={cn(
-                  "flex-1 flex flex-col min-h-0",
-                  !isActive && "hidden"
-                )}
-              >
-                {stream.platform === 'kick' ? (
-                  <NativeChat channelName={stream.channel} />
-                ) : stream.platform === 'twitch' ? (
-                  <iframe
-                    src={`https://www.twitch.tv/embed/${encodeURIComponent(stream.channel)}/chat?parent=${window.location.hostname}&darkpopout`}
-                    title={`${stream.channel} Twitch chat`}
-                    className="w-full flex-1 border-none min-h-0"
-                  />
-                ) : null}
-              </div>
-            );
-          })}
+          <div key={activeStream.id} className="flex-1 flex flex-col min-h-0">
+            {activeStream.platform === 'kick' ? (
+              <NativeChat channelName={activeStream.channel} />
+            ) : activeStream.platform === 'twitch' ? (
+              <iframe
+                src={`https://www.twitch.tv/embed/${encodeURIComponent(activeStream.channel)}/chat?parent=${window.location.hostname}&darkpopout`}
+                title={`${activeStream.channel} Twitch chat`}
+                className="w-full flex-1 border-none min-h-0"
+              />
+            ) : null}
+          </div>
 
           {/* Send Input */}
           {activeStream.platform === "kick" && (
