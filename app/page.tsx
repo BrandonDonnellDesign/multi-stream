@@ -5,8 +5,9 @@ import { Sidebar } from "@/components/sidebar/sidebar";
 import { StreamGrid } from "@/components/stream/stream-grid";
 import { ChatPanel } from "@/components/chat/chat-panel";
 import { useStreams } from "@/hooks/use-streams";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { ShareDialog } from "@/components/share/share-dialog";
+import { useStreamStatuses } from "@/hooks/use-stream-statuses";
 
 export default function MultiStreamViewer() {
   const [maxColumns, setMaxColumns] = useState<number>(3);
@@ -23,6 +24,14 @@ export default function MultiStreamViewer() {
     refreshStream,
     reorderStreams,
   } = useStreams();
+  const liveStatuses = useStreamStatuses(streams);
+  const streamsWithStatus = useMemo(
+    () => streams.map((stream) => ({
+      ...stream,
+      isLive: liveStatuses[stream.id] ?? stream.isLive,
+    })),
+    [liveStatuses, streams],
+  );
 
   const handleToggleChat = (id: string) => {
     const stream = streams.find((s) => s.id === id);
@@ -60,7 +69,7 @@ export default function MultiStreamViewer() {
     <div className="app-shell flex h-dvh overflow-hidden bg-background text-foreground">
       <Sidebar
         isOpen={isSidebarOpen}
-        streams={streams}
+        streams={streamsWithStatus}
         onClose={() => setIsSidebarOpen(!isSidebarOpen)}
         onAddStream={addStream}
         onToggleVisibility={toggleStreamVisibility}
@@ -89,7 +98,7 @@ export default function MultiStreamViewer() {
         </header>
         <div className="flex min-h-0 flex-1 gap-2">
           <div className="flex-1 min-h-0">
-            <StreamGrid streams={streams} onReorder={reorderStreams} maxColumns={maxColumns} />
+            <StreamGrid streams={streamsWithStatus} onReorder={reorderStreams} maxColumns={maxColumns} />
           </div>
           <ChatPanel
             streams={streams}

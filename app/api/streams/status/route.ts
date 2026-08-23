@@ -129,3 +129,48 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: "Status unavailable" }, { status: 503 });
   }
 }
+
+type StatusRequestStream = {
+  id: string;
+  platform: "twitch" | "kick" | "youtube";
+  channel: string;
+};
+
+function isStatusRequestStream(value: unknown): value is StatusRequestStream {
+  if (!value || typeof value !== "object") return false;
+  const stream = value as Partial<StatusRequestStream>;
+  return typeof stream.id === "string"
+    && stream.id.length <= 200
+    && (stream.platform === "twitch" || stream.platform === "kick" || stream.platform === "youtube")
+    && typeof stream.channel === "string"
+    && CHANNEL_PATTERN.test(stream.channel.trim());
+}
+
+async function checkStream(stream: StatusRequestStream) {
+  try {
+    return stream.platform === "twitch"
+      ? await isTwitchLive(stream.channel)
+      : stream.platform === "kick"
+        ? await isKickLive(stream.channel)
+        : await isYouTubeLive(stream.channel);
+  } catch {
+    return null;
+  }
+}
+
+export async function POST(request: NextRequest) {
+  try {
+    const body = await request.json() as { streams?: unknown };
+    if (!Array.isArray(body.streams) || body.streams.length > 50 || !body.streams.every(isStatusRequestStream)) {
+      return NextResponse.json({ error: "Invalid streams" }, { status: 400 });
+    }
+
+    const statuses = await Promise.all(body.streams.map(async (stream) => ({
+      id: stream.id,
+      isLive: await checkStream(stream),
+    })));
+    return NextResponse.json({ statuses });
+  } catch {
+    return NextResponse.json({ error: "Invalid request" }, { status: 400 });
+  }
+}

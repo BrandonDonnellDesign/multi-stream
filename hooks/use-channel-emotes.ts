@@ -1,11 +1,22 @@
 import { useState, useEffect } from "react";
-import { getKickChannelInfo } from "@/lib/kick-api";
 
 export interface Emote {
     id: string;
     name: string;
     url: string;
     provider: 'kick' | '7tv';
+}
+
+async function getKickChannelInfo(channelName: string, signal: AbortSignal) {
+    const slug = channelName.trim().toLowerCase();
+    const response = await fetch(
+        `https://kick.com/api/v2/channels/${encodeURIComponent(slug)}`,
+        { signal }
+    );
+    if (!response.ok) {
+        throw new Error(`Kick channel request failed with ${response.status}`);
+    }
+    return response.json();
 }
 
 export function useChannelEmotes(channelName: string) {
@@ -16,11 +27,13 @@ export function useChannelEmotes(channelName: string) {
 
     useEffect(() => {
         let mounted = true;
+        const controller = new AbortController();
+        const timeout = window.setTimeout(() => controller.abort(), 5_000);
 
         async function fetchEmotes() {
             try {
                 // 1. Fetch Kick Channel Info & Emotes
-                const kickData = await getKickChannelInfo(channelName);
+                const kickData = await getKickChannelInfo(channelName, controller.signal);
 
                 if (!mounted) return;
 
@@ -81,7 +94,11 @@ export function useChannelEmotes(channelName: string) {
             fetchEmotes();
         }
 
-        return () => { mounted = false; };
+        return () => {
+            mounted = false;
+            window.clearTimeout(timeout);
+            controller.abort();
+        };
     }, [channelName]);
 
     return { kickEmotes, sevenTVEmotes, sevenTVMap, chatroomId };

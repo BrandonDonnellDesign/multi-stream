@@ -1,4 +1,5 @@
 import './globals.css';
+import 'video.js/dist/video-js.css';
 import type { Metadata } from 'next';
 import { ThemeProvider } from '@/components/providers/theme-provider';
 

@@ -5,23 +5,14 @@ import React, { useEffect, useState, useRef } from "react";
 import { subscribeToKickChat, unsubscribeFromKickChat } from "@/lib/kick-pusher";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Crown, Sword, BadgeCheck, Diamond } from "lucide-react";
+import {
+    appendCachedChatMessage,
+    ChatMessage,
+    getCachedChatMessages,
+} from "@/lib/chat-message-cache";
 
 interface NativeChatProps {
     channelName: string;
-}
-
-export interface ChatMessage {
-    id: string;
-    content: string;
-    sender: {
-        username: string;
-        slug: string;
-        identity: {
-            color: string;
-            badges: Array<{ type: string; count?: number }>;
-        };
-    };
-    created_at: string;
 }
 
 const BadgeRenderer = ({ badges }: { badges: Array<{ type: string; count?: number }> }) => {
@@ -60,7 +51,7 @@ const BadgeRenderer = ({ badges }: { badges: Array<{ type: string; count?: numbe
 import { useChannelEmotes } from "@/hooks/use-channel-emotes";
 
 export function NativeChat({ channelName }: NativeChatProps) {
-    const [messages, setMessages] = useState<ChatMessage[]>([]);
+    const [messages, setMessages] = useState<ChatMessage[]>(() => getCachedChatMessages(channelName));
     const scrollRef = useRef<HTMLDivElement>(null);
     const bottomRef = useRef<HTMLDivElement>(null);
 
@@ -77,18 +68,13 @@ export function NativeChat({ channelName }: NativeChatProps) {
         if (!chatroomId) return;
 
         subscribeToKickChat<ChatMessage>(chatroomId, (data) => {
-            setMessages((prev) => {
-                // Limit message history to 200
-                const newMessages = [...prev, data];
-                if (newMessages.length > 200) newMessages.shift();
-                return newMessages;
-            });
+            setMessages(appendCachedChatMessage(channelName, data));
         });
 
         return () => {
             unsubscribeFromKickChat(chatroomId);
         };
-    }, [chatroomId]);
+    }, [channelName, chatroomId]);
 
 
 

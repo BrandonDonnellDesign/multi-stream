@@ -2,7 +2,6 @@ import { Stream } from "@/types/stream";
 import { Button } from "@/components/ui/button";
 import { Eye, EyeOff, GripVertical, MessageSquare, Play, RefreshCw, X } from "lucide-react";
 import { LiveIndicator } from "./live-indicator"; // Corrected import path
-import { useStreamStatus } from "@/hooks/use-stream-status";
 import { KickIcon, TwitchIcon } from "../ui/stream-icons";
 
 interface StreamCardProps {
@@ -23,7 +22,7 @@ export function StreamCard({
   onRemove,
   activeStreamId,
 }: StreamCardProps) {
-  const isLive = useStreamStatus(stream);
+  const isLive = stream.isLive ?? false;
 
   return (
     <div className={`group flex items-center justify-between rounded-2xl border px-2 py-2 transition-all ${activeStreamId === stream.id ? "border-primary/40 bg-primary/10" : "border-transparent bg-white/[.025] hover:border-white/10 hover:bg-white/[.045]"}`}>
