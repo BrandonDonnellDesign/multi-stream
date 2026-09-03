@@ -13,7 +13,7 @@ async function getTwitchToken() {
   if (twitchToken && twitchToken.expiresAt > Date.now()) return twitchToken.value;
 
   const clientId = process.env.TWITCH_CLIENT_ID ?? process.env.NEXT_PUBLIC_TWITCH_CLIENT_ID;
-  const clientSecret = process.env.TWITCH_CLIENT_SECRET ?? process.env.NEXT_PUBLIC_TWITCH_CLIENT_SECRET;
+  const clientSecret = process.env.TWITCH_CLIENT_SECRET;
   if (!clientId || !clientSecret) return null;
 
   const params = new URLSearchParams({
