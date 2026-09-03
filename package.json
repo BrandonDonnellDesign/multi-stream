@@ -49,8 +49,6 @@
     "@types/node": "26.2.0",
     "@types/react": "19.2.18",
     "@types/react-dom": "19.2.4",
-    "amazon-ivs-player": "^1.55.0",
-    "bowser": "^2.14.1",
     "class-variance-authority": "^0.7.1",
     "classnames": "^2.5.1",
     "clsx": "^2.1.1",
@@ -79,7 +77,6 @@
     "tailwind-merge": "^3.6.0",
     "tailwindcss-animate": "^1.0.7",
     "vaul": "^1.1.2",
-    "video.js": "^8.24.0",
     "zod": "^4.4.3"
   },
   "devDependencies": {
@@ -88,7 +85,6 @@
     "@tailwindcss/postcss": "^4.3.3",
     "@types/crypto-js": "^4.2.2",
     "@types/lodash": "^4.17.25",
-    "@types/video.js": "^7.3.58",
     "eslint": "^9.39.5",
     "lru-cache": "^11.5.2",
     "postcss": "^8.5.26",
